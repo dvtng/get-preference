@@ -2,6 +2,8 @@ import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { HomeScreen } from "./screens/HomeScreen";
+import { NeedsName } from "./screens/NeedsName";
+import { PollScreen } from "./screens/PollScreen";
 
 export function App() {
   return (
@@ -12,7 +14,16 @@ export function App() {
         </header>
         <Switch>
           <Route path="/" exact>
-            <HomeScreen />
+            <NeedsName>
+              <HomeScreen />
+            </NeedsName>
+          </Route>
+          <Route path="/poll/:pollId" exact>
+            {({ match }) => (
+              <NeedsName>
+                <PollScreen pollId={match.params.pollId} />
+              </NeedsName>
+            )}
           </Route>
         </Switch>
       </div>

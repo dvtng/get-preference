@@ -1,14 +1,8 @@
 import React, { useState, useCallback } from "react";
-import nanoid from "nanoid";
 import { PollOption } from "../widgets/PollOption";
+import { createOption } from "../models/Option";
 import "./CreatePoll.css";
-
-const createOption = label => {
-  return {
-    id: nanoid(),
-    label
-  };
-};
+import { CreatePollButton } from "./CreatePollButton";
 
 export const CreatePoll = () => {
   const [pollOptions, setPollOptions] = useState([]);
@@ -46,7 +40,7 @@ export const CreatePoll = () => {
         ))}
       </div>
       <div className="CreatePoll-footer">
-        <button disabled={pollOptions.length < 2}>Create poll</button>
+        <CreatePollButton pollOptions={pollOptions} />
       </div>
     </div>
   );
