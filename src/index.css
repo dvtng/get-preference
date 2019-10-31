@@ -1,13 +1,38 @@
+html,
+body,
+#root {
+  height: 100%;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
+  font-size: 14pt;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+button,
+input {
+  background: #444;
+  border: none;
+  color: inherit;
+  font-size: inherit;
+  padding: 8px 12px;
+}
+
+button[disabled] {
+  background: #333;
+  color: #555;
+}
+
+h1 {
+  font-size: 15pt;
+  font-weight: normal;
+}
+
+h2 {
+  font-size: 16pt;
 }
