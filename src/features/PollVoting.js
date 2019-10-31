@@ -1,10 +1,13 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect, useContext } from "react";
 import { PollOption } from "../widgets/PollOption";
 import { ActionFooter } from "../widgets/ActionFooter";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { SubmitVoteButton } from "./SubmitVoteButton";
+import { joinPoll } from "../api/PollApi";
+import { CurrentUserContext } from "../models/CurrentUser";
+import { observer } from "mobx-react-lite";
 
-export const PollVoting = ({ poll }) => {
+export const PollVoting = observer(({ poll }) => {
   const [orderedOptionIds, setOrderedOptionIds] = useState(() => {
     // TODO shuffle
     return Object.values(poll.options).map(option => option.id);
@@ -25,6 +28,16 @@ export const PollVoting = ({ poll }) => {
     [orderedOptionIds]
   );
 
+  const currentUser = useContext(CurrentUserContext);
+
+  useEffect(() => {
+    joinPoll({
+      pollId: poll.id,
+      userId: currentUser.id,
+      userName: currentUser.name
+    });
+  }, [poll, currentUser]);
+
   return (
     <div>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -32,7 +45,7 @@ export const PollVoting = ({ poll }) => {
           {provided => (
             <div ref={provided.innerRef}>
               <h2>Vote!</h2>
-              <p>Drag the options below to match your preferred order</p>
+              <p>Drag the options into your preferred order:</p>
               {orderedOptionIds.map((optionId, index) => (
                 <Draggable key={optionId} draggableId={optionId} index={index}>
                   {(provided, snapshot) => (
@@ -67,4 +80,4 @@ export const PollVoting = ({ poll }) => {
       </DragDropContext>
     </div>
   );
-};
+});

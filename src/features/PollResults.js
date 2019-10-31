@@ -10,9 +10,8 @@ export const PollResults = ({ poll }) => {
   return (
     <div>
       <h2>Results</h2>
-      <p>Poll is closed. Here are the results:</p>
       {ranking.map(optionId => (
-        <PollOption label={poll.options[optionId].label} />
+        <PollOption key={optionId} label={poll.options[optionId].label} />
       ))}
       <ActionFooter>
         <Link to="/">Create another poll</Link>

@@ -31,6 +31,17 @@ export const subscribePoll = (pollId, onData) => {
     });
 };
 
+export const joinPoll = ({ pollId, userId, userName }) => {
+  return getDb()
+    .collection("polls")
+    .doc(pollId)
+    .update({
+      [`users.${userId}`]: {
+        name: userName
+      }
+    });
+};
+
 export const submitVote = ({ pollId, userId, orderedOptionIds }) => {
   return getDb()
     .collection("polls")

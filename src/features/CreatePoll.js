@@ -3,6 +3,7 @@ import { PollOption } from "../widgets/PollOption";
 import { ActionFooter } from "../widgets/ActionFooter";
 import { createOption } from "../models/Option";
 import { CreatePollButton } from "./CreatePollButton";
+import "./CreatePoll.css";
 
 export const CreatePoll = () => {
   const [pollOptions, setPollOptions] = useState([]);
@@ -28,11 +29,14 @@ export const CreatePoll = () => {
     <div>
       <h2>Create a new poll</h2>
       <form onSubmit={onSubmitNewOptionValue}>
-        <input
-          placeholder="Add an option"
-          value={newOptionValue}
-          onChange={onChangeNewOptionValue}
-        />
+        <p>
+          <input
+            className="CreatePoll-input"
+            placeholder="Add an option"
+            value={newOptionValue}
+            onChange={onChangeNewOptionValue}
+          />
+        </p>
       </form>
       <div>
         {pollOptions.map(option => (

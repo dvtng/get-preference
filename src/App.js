@@ -12,20 +12,22 @@ export function App() {
         <header className="App-header">
           <h1>Get Preference</h1>
         </header>
-        <Switch>
-          <Route path="/" exact>
-            <NeedsName>
-              <HomeScreen />
-            </NeedsName>
-          </Route>
-          <Route path="/poll/:pollId" exact>
-            {({ match }) => (
+        <main>
+          <Switch>
+            <Route path="/" exact>
               <NeedsName>
-                <PollScreen pollId={match.params.pollId} />
+                <HomeScreen />
               </NeedsName>
-            )}
-          </Route>
-        </Switch>
+            </Route>
+            <Route path="/poll/:pollId" exact>
+              {({ match }) => (
+                <NeedsName>
+                  <PollScreen pollId={match.params.pollId} />
+                </NeedsName>
+              )}
+            </Route>
+          </Switch>
+        </main>
       </div>
     </Router>
   );
