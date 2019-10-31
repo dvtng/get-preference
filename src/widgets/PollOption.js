@@ -1,5 +1,6 @@
 import React from "react";
+import "./PollOption.css";
 
 export const PollOption = ({ label }) => {
-  return <p>{label}</p>;
+  return <div className="PollOption">{label}</div>;
 };

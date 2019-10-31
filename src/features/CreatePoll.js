@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { PollOption } from "../widgets/PollOption";
+import { ActionFooter } from "../widgets/ActionFooter";
 import { createOption } from "../models/Option";
-import "./CreatePoll.css";
 import { CreatePollButton } from "./CreatePollButton";
 
 export const CreatePoll = () => {
@@ -39,9 +39,9 @@ export const CreatePoll = () => {
           <PollOption key={option.id} label={option.label} />
         ))}
       </div>
-      <div className="CreatePoll-footer">
+      <ActionFooter>
         <CreatePollButton pollOptions={pollOptions} />
-      </div>
+      </ActionFooter>
     </div>
   );
 };

@@ -1,10 +1,10 @@
 import firebase from "firebase/app";
 
+const getDb = () => firebase.firestore();
+
 // Returns promise with pollId
 export const createPoll = ({ creatorId, creatorName, pollOptions }) => {
-  const db = firebase.firestore();
-
-  return db
+  return getDb()
     .collection("polls")
     .add({
       creatorId,
@@ -17,4 +17,18 @@ export const createPoll = ({ creatorId, creatorName, pollOptions }) => {
       }
     })
     .then(docRef => docRef.id);
+};
+
+// Returns unsubscribe function
+export const subscribePoll = (pollId, onData) => {
+  return getDb()
+    .collection("polls")
+    .doc(pollId)
+    .onSnapshot(doc => {
+      onData(doc.data());
+    });
+};
+
+export const submitVote = (pollId, orderedOptionIds) => {
+  // TODO
 };

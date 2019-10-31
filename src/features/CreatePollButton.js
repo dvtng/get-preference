@@ -13,7 +13,10 @@ export const CreatePollButton = observer(({ pollOptions }) => {
     return createPoll({
       creatorId: currentUser.id,
       creatorName: currentUser.name,
-      pollOptions
+      pollOptions: pollOptions.reduce((obj, option) => {
+        obj[option.id] = option;
+        return obj;
+      }, {})
     }).then(pollId => {
       history.push(`/poll/${encodeURIComponent(pollId)}`);
     });
