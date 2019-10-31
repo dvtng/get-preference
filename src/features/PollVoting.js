@@ -2,8 +2,9 @@ import React, { useState, useCallback } from "react";
 import { PollOption } from "../widgets/PollOption";
 import { ActionFooter } from "../widgets/ActionFooter";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { SubmitVoteButton } from "./SubmitVoteButton";
 
-export const VotePoll = ({ poll }) => {
+export const PollVoting = ({ poll }) => {
   const [orderedOptionIds, setOrderedOptionIds] = useState(() => {
     // TODO shuffle
     return Object.values(poll.options).map(option => option.id);
@@ -55,7 +56,10 @@ export const VotePoll = ({ poll }) => {
               ))}
               {provided.placeholder}
               <ActionFooter>
-                <button>Submit</button>
+                <SubmitVoteButton
+                  pollId={poll.id}
+                  orderedOptionIds={orderedOptionIds}
+                />
               </ActionFooter>
             </div>
           )}

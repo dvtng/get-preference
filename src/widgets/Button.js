@@ -1,9 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 export const Button = props => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { onClick, disabled, ...otherProps } = props;
+  const isMounted = useRef(true);
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
+  const { onClick = () => {}, disabled = false, ...otherProps } = props;
 
   return (
     <button
@@ -14,7 +21,9 @@ export const Button = props => {
         if (result instanceof Promise) {
           setIsSubmitting(true);
           result.finally(() => {
-            setIsSubmitting(false);
+            if (isMounted.current) {
+              setIsSubmitting(false);
+            }
           });
         }
         return result;

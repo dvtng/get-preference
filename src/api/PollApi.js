@@ -25,10 +25,26 @@ export const subscribePoll = (pollId, onData) => {
     .collection("polls")
     .doc(pollId)
     .onSnapshot(doc => {
-      onData(doc.data());
+      const data = doc.data();
+      data.id = pollId;
+      onData(data);
     });
 };
 
-export const submitVote = (pollId, orderedOptionIds) => {
-  // TODO
+export const submitVote = ({ pollId, userId, orderedOptionIds }) => {
+  return getDb()
+    .collection("polls")
+    .doc(pollId)
+    .update({
+      [`votes.${userId}`]: orderedOptionIds
+    });
+};
+
+export const closePoll = pollId => {
+  return getDb()
+    .collection("polls")
+    .doc(pollId)
+    .update({
+      status: "CLOSED"
+    });
 };
