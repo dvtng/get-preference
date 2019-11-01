@@ -6,7 +6,5 @@ export const getRanking = votes => {
     });
   });
 
-  return Object.entries(counts)
-    .sort((a, b) => b[1] - a[1])
-    .map(entry => entry[0]);
+  return Object.entries(counts).sort((a, b) => b[1] - a[1]);
 };

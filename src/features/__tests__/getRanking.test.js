@@ -12,7 +12,7 @@ it("should return immediate majority", () => {
   // c = 5
   // d = 6
 
-  expect(getRanking(votes)).toEqual(["a", "b", "d", "c"]);
+  expect(getRanking(votes)).toEqual([["a", 12], ["b", 7], ["d", 6], ["c", 5]]);
 });
 
 it("should return majority winner in second preference", () => {
@@ -29,5 +29,10 @@ it("should return majority winner in second preference", () => {
   // c = 10
   // d = 10
 
-  expect(getRanking(votes)).toEqual(["b", "a", "c", "d"]);
+  expect(getRanking(votes)).toEqual([
+    ["b", 16],
+    ["a", 14],
+    ["c", 10],
+    ["d", 10]
+  ]);
 });

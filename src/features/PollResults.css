@@ -1,0 +1,10 @@
+.PollResults-winner {
+  background: #363b48;
+  margin-bottom: 8px;
+  padding: 8px 0;
+}
+
+.PollResults-winner-label {
+  font-size: 0.8em;
+  font-weight: bold;
+}
