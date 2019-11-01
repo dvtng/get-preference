@@ -9,5 +9,5 @@ https://getpreference.web.app
 ```sh
 yarn start # dev server
 yarn test # jest
-yarn deploy # build and deploy
+yarn deploy # build and deploy (after `npx firebase login`)
 ```
