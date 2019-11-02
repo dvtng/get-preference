@@ -7,10 +7,23 @@ import { joinPoll } from "../api/PollApi";
 import { CurrentUserContext } from "../models/CurrentUser";
 import { observer } from "mobx-react-lite";
 
+const swap = (array, a, b) => {
+  const temp = array[a];
+  array[a] = array[b];
+  array[b] = temp;
+};
+
+const shuffle = array => {
+  for (let i = array.length - 1; i >= 1; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    swap(array, i, j);
+  }
+  return array;
+};
+
 export const PollVoting = observer(({ poll }) => {
   const [orderedOptionIds, setOrderedOptionIds] = useState(() => {
-    // TODO shuffle
-    return Object.values(poll.options).map(option => option.id);
+    return shuffle(Object.values(poll.options).map(option => option.id));
   });
 
   const onDragEnd = useCallback(
