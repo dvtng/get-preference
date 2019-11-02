@@ -10,7 +10,7 @@ export const PollResults = ({ poll }) => {
 
   return (
     <div>
-      <h2>Results</h2>
+      <h2>{poll.name || "Results"}</h2>
       {ranking.map(([optionId, points], index) => {
         const option = (
           <PollOption

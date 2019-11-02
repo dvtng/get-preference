@@ -3,13 +3,14 @@ import firebase from "firebase/app";
 const getDb = () => firebase.firestore();
 
 // Returns promise with pollId
-export const createPoll = ({ creatorId, creatorName, pollOptions }) => {
+export const createPoll = ({ creatorId, creatorName, name, options }) => {
   return getDb()
     .collection("polls")
     .add({
       creatorId,
       status: "OPEN",
-      options: pollOptions,
+      name,
+      options,
       users: {
         [creatorId]: {
           name: creatorName

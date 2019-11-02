@@ -57,7 +57,7 @@ export const PollVoting = observer(({ poll }) => {
         <Droppable droppableId="poll-options">
           {provided => (
             <div ref={provided.innerRef}>
-              <h2>Vote!</h2>
+              <h2>{poll.name || "Vote"}</h2>
               <p>Drag the options into your preferred order:</p>
               {orderedOptionIds.map((optionId, index) => (
                 <Draggable key={optionId} draggableId={optionId} index={index}>

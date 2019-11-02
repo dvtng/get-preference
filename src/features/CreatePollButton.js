@@ -5,7 +5,7 @@ import { createPoll } from "../api/PollApi";
 import { Button } from "../widgets/Button";
 import { useHistory } from "react-router-dom";
 
-export const CreatePollButton = observer(({ pollOptions }) => {
+export const CreatePollButton = observer(({ pollName, pollOptions }) => {
   const currentUser = useContext(CurrentUserContext);
   const history = useHistory();
 
@@ -13,14 +13,15 @@ export const CreatePollButton = observer(({ pollOptions }) => {
     return createPoll({
       creatorId: currentUser.id,
       creatorName: currentUser.name,
-      pollOptions: pollOptions.reduce((obj, option) => {
+      name: pollName,
+      options: pollOptions.reduce((obj, option) => {
         obj[option.id] = option;
         return obj;
       }, {})
     }).then(pollId => {
       history.push(`/poll/${encodeURIComponent(pollId)}`);
     });
-  }, [pollOptions, currentUser, history]);
+  }, [pollName, pollOptions, currentUser, history]);
 
   return (
     <Button disabled={pollOptions.length < 2} onClick={onClickCreatePollButton}>

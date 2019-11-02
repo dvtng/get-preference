@@ -7,7 +7,7 @@ import "./CreatePoll.css";
 
 export const CreatePoll = () => {
   const [pollOptions, setPollOptions] = useState([]);
-
+  const [pollName, setPollName] = useState("");
   const [newOptionValue, setNewOptionValue] = useState("");
   const onChangeNewOptionValue = useCallback(e => {
     setNewOptionValue(e.target.value);
@@ -28,6 +28,16 @@ export const CreatePoll = () => {
   return (
     <div>
       <h2>Create a new poll</h2>
+      <p>
+        <input
+          className="CreatePoll-input"
+          placeholder="What would you like to ask?"
+          value={pollName}
+          onChange={e => {
+            setPollName(e.target.value);
+          }}
+        />
+      </p>
       <form onSubmit={onSubmitNewOptionValue}>
         <p>
           <input
@@ -44,7 +54,7 @@ export const CreatePoll = () => {
         ))}
       </div>
       <ActionFooter>
-        <CreatePollButton pollOptions={pollOptions} />
+        <CreatePollButton pollOptions={pollOptions} pollName={pollName} />
       </ActionFooter>
     </div>
   );
