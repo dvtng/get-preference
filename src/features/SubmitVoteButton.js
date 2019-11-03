@@ -8,11 +8,12 @@ export const SubmitVoteButton = ({ pollId, orderedOptionIds }) => {
 
   return (
     <Button
+      type="submit"
       onClick={() =>
         submitVote({ pollId, userId: currentUser.id, orderedOptionIds })
       }
     >
-      Submit
+      Submit my preferences
     </Button>
   );
 };

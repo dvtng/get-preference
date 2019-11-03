@@ -1,0 +1,50 @@
+.Screen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  text-align: center;
+}
+
+.Screen-header {
+  background: #151820;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.Screen-header h1 {
+  color: #9a9a9a;
+  font-size: 14px;
+  font-weight: normal;
+  margin: 16px;
+  letter-spacing: 1px;
+}
+
+.Screen-main {
+  flex: 1;
+  height: 100%;
+  padding: 18px;
+}
+
+.Screen-main h2 {
+  font-size: 24px;
+  font-weight: normal;
+  margin: 14px 0 16px;
+}
+
+.Screen-main h3 {
+  color: #979797;
+  font-size: inherit;
+  font-weight: normal;
+  margin: 16px 0 32px;
+}
+
+.Screen-footer {
+  display: flex;
+  justify-content: stretch;
+}
+
+.Screen-footer button {
+  flex: 1;
+}

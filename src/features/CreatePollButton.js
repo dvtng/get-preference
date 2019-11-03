@@ -5,27 +5,29 @@ import { createPoll } from "../api/PollApi";
 import { Button } from "../widgets/Button";
 import { useHistory } from "react-router-dom";
 
-export const CreatePollButton = observer(({ pollName, pollOptions }) => {
-  const currentUser = useContext(CurrentUserContext);
-  const history = useHistory();
+export const CreatePollButton = observer(
+  ({ pollName, disabled, ...otherProps }) => {
+    const currentUser = useContext(CurrentUserContext);
+    const history = useHistory();
 
-  const onClickCreatePollButton = useCallback(() => {
-    return createPoll({
-      creatorId: currentUser.id,
-      creatorName: currentUser.name,
-      name: pollName,
-      options: pollOptions.reduce((obj, option) => {
-        obj[option.id] = option;
-        return obj;
-      }, {})
-    }).then(pollId => {
-      history.push(`/poll/${encodeURIComponent(pollId)}`);
-    });
-  }, [pollName, pollOptions, currentUser, history]);
+    const onClickCreatePollButton = useCallback(() => {
+      return createPoll({
+        creatorId: currentUser.id,
+        creatorName: currentUser.name,
+        name: pollName
+      }).then(pollId => {
+        history.push(`/poll/${encodeURIComponent(pollId)}`);
+      });
+    }, [pollName, currentUser, history]);
 
-  return (
-    <Button disabled={pollOptions.length < 2} onClick={onClickCreatePollButton}>
-      Create poll
-    </Button>
-  );
-});
+    return (
+      <Button
+        {...otherProps}
+        disabled={disabled || !pollName}
+        onClick={onClickCreatePollButton}
+      >
+        Create poll
+      </Button>
+    );
+  }
+);

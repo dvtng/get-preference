@@ -1,11 +1,9 @@
-import React, { useState, useCallback, useEffect, useContext } from "react";
+import React, { useState, useCallback } from "react";
 import { PollOption } from "../widgets/PollOption";
-import { ActionFooter } from "../widgets/ActionFooter";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { SubmitVoteButton } from "./SubmitVoteButton";
-import { joinPoll } from "../api/PollApi";
-import { CurrentUserContext } from "../models/CurrentUser";
 import { observer } from "mobx-react-lite";
+import { Screen } from "../widgets/Screen";
 
 const swap = (array, a, b) => {
   const temp = array[a];
@@ -21,7 +19,7 @@ const shuffle = array => {
   return array;
 };
 
-export const PollVoting = observer(({ poll }) => {
+export const PollVote = observer(({ poll }) => {
   const [orderedOptionIds, setOrderedOptionIds] = useState(() => {
     return shuffle(Object.values(poll.options).map(option => option.id));
   });
@@ -41,24 +39,21 @@ export const PollVoting = observer(({ poll }) => {
     [orderedOptionIds]
   );
 
-  const currentUser = useContext(CurrentUserContext);
-
-  useEffect(() => {
-    joinPoll({
-      pollId: poll.id,
-      userId: currentUser.id,
-      userName: currentUser.name
-    });
-  }, [poll, currentUser]);
-
   return (
-    <div>
+    <Screen
+      actions={
+        <SubmitVoteButton
+          pollId={poll.id}
+          orderedOptionIds={orderedOptionIds}
+        />
+      }
+    >
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="poll-options">
           {provided => (
             <div ref={provided.innerRef}>
               <h2>{poll.name || "Vote"}</h2>
-              <p>Drag the options into your preferred order:</p>
+              <h3>Drag the options into your preferred order:</h3>
               {orderedOptionIds.map((optionId, index) => (
                 <Draggable key={optionId} draggableId={optionId} index={index}>
                   {(provided, snapshot) => (
@@ -66,14 +61,9 @@ export const PollVoting = observer(({ poll }) => {
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
-                      style={
-                        snapshot.isDragging
-                          ? {
-                              ...provided.draggableProps.style,
-                              background: "#777"
-                            }
-                          : provided.draggableProps.style
-                      }
+                      className={["draggable"]
+                        .concat(snapshot.isDragging ? ["dragging"] : [])
+                        .join(" ")}
                     >
                       <PollOption label={poll.options[optionId].label} />
                     </div>
@@ -81,16 +71,10 @@ export const PollVoting = observer(({ poll }) => {
                 </Draggable>
               ))}
               {provided.placeholder}
-              <ActionFooter>
-                <SubmitVoteButton
-                  pollId={poll.id}
-                  orderedOptionIds={orderedOptionIds}
-                />
-              </ActionFooter>
             </div>
           )}
         </Droppable>
       </DragDropContext>
-    </div>
+    </Screen>
   );
 });

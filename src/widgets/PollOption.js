@@ -5,12 +5,14 @@ import "./PollOption.css";
 export const PollOption = ({ label, points }) => {
   return (
     <div className="PollOption">
-      {label}
-      {points ? (
-        <Tag>
-          {points} point{points > 1 ? "s" : ""}
-        </Tag>
-      ) : null}
+      <div className="PollOption-inner">
+        {label}
+        {points ? (
+          <Tag>
+            {points} point{points > 1 ? "s" : ""}
+          </Tag>
+        ) : null}
+      </div>
     </div>
   );
 };

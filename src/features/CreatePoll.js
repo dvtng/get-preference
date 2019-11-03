@@ -1,61 +1,23 @@
-import React, { useState, useCallback } from "react";
-import { PollOption } from "../widgets/PollOption";
-import { ActionFooter } from "../widgets/ActionFooter";
-import { createOption } from "../models/Option";
+import React, { useState } from "react";
 import { CreatePollButton } from "./CreatePollButton";
-import "./CreatePoll.css";
+import { Screen } from "../widgets/Screen";
 
 export const CreatePoll = () => {
-  const [pollOptions, setPollOptions] = useState([]);
   const [pollName, setPollName] = useState("");
-  const [newOptionValue, setNewOptionValue] = useState("");
-  const onChangeNewOptionValue = useCallback(e => {
-    setNewOptionValue(e.target.value);
-  }, []);
-  const onSubmitNewOptionValue = useCallback(
-    e => {
-      e.preventDefault();
-      if (newOptionValue === "") {
-        return;
-      }
-
-      setPollOptions(pollOptions.concat([createOption(newOptionValue)]));
-      setNewOptionValue("");
-    },
-    [pollOptions, newOptionValue]
-  );
 
   return (
-    <div>
-      <h2>Create a new poll</h2>
-      <p>
-        <input
-          className="CreatePoll-input"
-          placeholder="What would you like to ask?"
-          value={pollName}
-          onChange={e => {
-            setPollName(e.target.value);
-          }}
-        />
-      </p>
-      <form onSubmit={onSubmitNewOptionValue}>
-        <p>
-          <input
-            className="CreatePoll-input"
-            placeholder="Add an option"
-            value={newOptionValue}
-            onChange={onChangeNewOptionValue}
-          />
-        </p>
-      </form>
-      <div>
-        {pollOptions.map(option => (
-          <PollOption key={option.id} label={option.label} />
-        ))}
-      </div>
-      <ActionFooter>
-        <CreatePollButton pollOptions={pollOptions} pollName={pollName} />
-      </ActionFooter>
-    </div>
+    <Screen
+      title="Create a new poll"
+      actions={<CreatePollButton type="submit" pollName={pollName} />}
+    >
+      <input
+        className="CreatePoll-input"
+        placeholder="What would you like to ask?"
+        value={pollName}
+        onChange={e => {
+          setPollName(e.target.value);
+        }}
+      />
+    </Screen>
   );
 };

@@ -1,3 +1,20 @@
 .PollOption {
-  padding: 8px 12px;
+  padding: 8px 0;
+}
+
+.PollOption-inner {
+  border: 1px solid #828282;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 22px;
+}
+
+.draggable .PollOption-inner {
+  background: #c5c5c5;
+  color: black;
+}
+
+.dragging .PollOption-inner {
+  background: #fefefe;
 }

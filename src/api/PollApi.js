@@ -3,14 +3,13 @@ import firebase from "firebase/app";
 const getDb = () => firebase.firestore();
 
 // Returns promise with pollId
-export const createPoll = ({ creatorId, creatorName, name, options }) => {
+export const createPoll = ({ creatorId, creatorName, name }) => {
   return getDb()
     .collection("polls")
     .add({
       creatorId,
-      status: "OPEN",
+      status: "OPTIONS",
       name,
-      options,
       users: {
         [creatorId]: {
           name: creatorName
@@ -40,6 +39,33 @@ export const joinPoll = ({ pollId, userId, userName }) => {
       [`users.${userId}`]: {
         name: userName
       }
+    });
+};
+
+export const addOption = ({ pollId, option }) => {
+  return getDb()
+    .collection("polls")
+    .doc(pollId)
+    .update({
+      [`options.${option.id}`]: option
+    });
+};
+
+export const submitOptions = ({ pollId, userId }) => {
+  return getDb()
+    .collection("polls")
+    .doc(pollId)
+    .update({
+      [`submittedOptions.${userId}`]: true
+    });
+};
+
+export const startVoting = pollId => {
+  return getDb()
+    .collection("polls")
+    .doc(pollId)
+    .update({
+      status: "OPEN"
     });
 };
 
