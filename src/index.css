@@ -23,7 +23,6 @@ input {
   box-sizing: border-box;
   line-height: inherit;
   font-size: inherit;
-  padding: 12px 22px;
   transition: 0.2s all;
   width: 100%;
 }
@@ -33,6 +32,7 @@ input {
   border-radius: 4px;
   color: black;
   outline: none;
+  padding: 12px 22px;
 }
 
 input:focus {
@@ -42,6 +42,7 @@ input:focus {
 button {
   background: #495161;
   color: white;
+  padding: 16px 22px;
 }
 
 button[type="submit"] {
