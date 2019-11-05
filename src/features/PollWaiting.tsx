@@ -1,9 +1,9 @@
 import React, { FC } from "react";
 import "./PollWaiting.css";
-import { PollType } from "../api/PollType";
+import { PollState } from "../models/PollState";
 
 export type PollWaitingProps = {
-  poll: PollType;
+  poll: PollState;
   isReady: (userId: string) => boolean;
 };
 

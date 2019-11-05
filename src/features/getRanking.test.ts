@@ -1,4 +1,4 @@
-import { getRanking } from "../getRanking";
+import { getRanking } from "./getRanking";
 
 it("should return immediate majority", () => {
   const votes = [

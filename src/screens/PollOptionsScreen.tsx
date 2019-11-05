@@ -1,26 +1,22 @@
 import React, { useState, useContext, FC } from "react";
 import { PollOption } from "../widgets/PollOption";
-import { createOption } from "../models/Option";
 import { Screen } from "../widgets/Screen";
 import { CurrentUserContext } from "../models/CurrentUser";
-import { addOption, submitOptions } from "../api/PollApi";
 import { Button } from "../widgets/Button";
-import { PollType } from "../api/PollType";
+import { PollState } from "../models/PollState";
+import { usePollActions } from "../models/Poll";
 
 export type PollOptionsScreenProps = {
-  poll: PollType;
+  poll: PollState;
 };
 
 export const PollOptionsScreen: FC<PollOptionsScreenProps> = ({ poll }) => {
+  const pollActions = usePollActions(poll.id);
   const currentUser = useContext(CurrentUserContext);
   const [newOptionValue, setNewOptionValue] = useState("");
 
   const submitOption = () => {
-    const option = createOption({
-      label: newOptionValue,
-      creatorId: currentUser.id
-    });
-    addOption({ pollId: poll.id, option });
+    pollActions.addOption(currentUser.id, newOptionValue);
     setNewOptionValue("");
   };
 
@@ -29,12 +25,7 @@ export const PollOptionsScreen: FC<PollOptionsScreenProps> = ({ poll }) => {
       title={poll.name}
       subTitle="Add options to vote on:"
       actions={
-        <Button
-          type="submit"
-          onClick={() =>
-            submitOptions({ pollId: poll.id, userId: currentUser.id })
-          }
-        >
+        <Button type="submit" onClick={() => pollActions.submitOptions()}>
           I'm out of ideas
         </Button>
       }

@@ -3,10 +3,11 @@ import { createContext, useContext } from "react";
 import { action, decorate, observable } from "mobx";
 
 const CURRENT_USER_ID_KEY = "app.currentUserId";
+const CURRENT_USER_NAME_KEY = "app.currentUserName";
 
 export class CurrentUser {
   id: string;
-  name: string = localStorage.getItem("app.currentUserName") || "";
+  name: string = localStorage.getItem(CURRENT_USER_NAME_KEY) || "";
 
   constructor() {
     const id = localStorage.getItem(CURRENT_USER_ID_KEY);
@@ -20,7 +21,7 @@ export class CurrentUser {
 
   setName = action((name: string) => {
     this.name = name;
-    localStorage.setItem("app.currentUserName", name);
+    localStorage.setItem(CURRENT_USER_NAME_KEY, name);
   });
 }
 

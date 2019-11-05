@@ -1,9 +1,10 @@
-import React, { useContext, useCallback, FC } from "react";
+import React, { FC } from "react";
 import { observer } from "mobx-react-lite";
-import { CurrentUserContext } from "../models/CurrentUser";
-import { createPoll } from "../api/PollApi";
+import { useCurrentUser } from "../models/CurrentUser";
 import { Button, ButtonProps } from "../widgets/Button";
 import { useHistory } from "react-router-dom";
+import { useDb } from "../api/DbContext";
+import { Poll } from "../models/Poll";
 
 export type CreatePollButtonProps = {
   pollName: string;
@@ -11,24 +12,19 @@ export type CreatePollButtonProps = {
 
 export const CreatePollButton: FC<CreatePollButtonProps> = observer(
   ({ pollName, disabled, ...otherProps }) => {
-    const currentUser = useContext(CurrentUserContext);
+    const db = useDb();
+    const currentUser = useCurrentUser();
     const history = useHistory();
-
-    const onClickCreatePollButton = useCallback(() => {
-      return createPoll({
-        creatorId: currentUser.id,
-        creatorName: currentUser.name,
-        name: pollName
-      }).then(pollId => {
-        history.push(`/poll/${encodeURIComponent(pollId)}`);
-      });
-    }, [pollName, currentUser, history]);
 
     return (
       <Button
         {...otherProps}
         disabled={disabled || !pollName}
-        onClick={onClickCreatePollButton}
+        onClick={() => {
+          return Poll.create(db, currentUser, pollName).then(poll => {
+            history.push(`/poll/${encodeURIComponent(poll.id)}`);
+          });
+        }}
       >
         Create poll
       </Button>

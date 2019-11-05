@@ -4,10 +4,10 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { SubmitVoteButton } from "../features/SubmitVoteButton";
 import { Screen } from "../widgets/Screen";
 import { shuffle } from "../utilities/shuffle";
-import { PollType } from "../api/PollType";
+import { PollState } from "../models/PollState";
 
 export type PollVoteScreenProps = {
-  poll: PollType;
+  poll: PollState;
 };
 
 export const PollVoteScreen: FC<PollVoteScreenProps> = ({ poll }) => {

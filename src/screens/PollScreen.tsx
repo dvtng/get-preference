@@ -1,5 +1,5 @@
 import React, { useEffect, FC } from "react";
-import { usePoll } from "../models/Poll";
+import { usePollState, usePollActions } from "../models/Poll";
 import { PollVoteScreen } from "./PollVoteScreen";
 import { LoadingScreen } from "./LoadingScreen";
 import { useCurrentUser } from "../models/CurrentUser";
@@ -7,18 +7,19 @@ import { PollOptionsWaiting } from "../features/PollOptionsWaiting";
 import { PollOptionsScreen } from "./PollOptionsScreen";
 import { PollVoteWaiting } from "../features/PollVoteWaiting";
 import { PollResults } from "../features/PollResults";
-import { joinPoll } from "../api/PollApi";
 
 export type PollScreenProps = {
   pollId: string;
 };
 
 export const PollScreen: FC<PollScreenProps> = ({ pollId }) => {
-  const poll = usePoll(pollId);
+  const poll = usePollState(pollId);
+  const pollActions = usePollActions(pollId);
   const currentUser = useCurrentUser();
+
   useEffect(() => {
-    joinPoll({ pollId, userId: currentUser.id, userName: currentUser.name });
-  }, [pollId, currentUser]);
+    pollActions.join();
+  }, [pollActions]);
 
   if (!poll) {
     return <LoadingScreen />;

@@ -11,7 +11,7 @@ export type Option = {
   label: string;
 };
 
-export type PollType = {
+export type PollState = {
   id: string;
   creatorId: string;
   status: Status;

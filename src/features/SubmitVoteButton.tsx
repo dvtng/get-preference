@@ -1,7 +1,6 @@
-import React, { useContext, FC } from "react";
+import React, { FC } from "react";
 import { Button } from "../widgets/Button";
-import { submitVote } from "../api/PollApi";
-import { CurrentUserContext } from "../models/CurrentUser";
+import { usePollActions } from "../models/Poll";
 
 export type SubmitVoteButtonProps = {
   pollId: string;
@@ -12,14 +11,12 @@ export const SubmitVoteButton: FC<SubmitVoteButtonProps> = ({
   pollId,
   orderedOptionIds
 }) => {
-  const currentUser = useContext(CurrentUserContext);
+  const pollActions = usePollActions(pollId);
 
   return (
     <Button
       type="submit"
-      onClick={() =>
-        submitVote({ pollId, userId: currentUser.id, orderedOptionIds })
-      }
+      onClick={() => pollActions.submitVote(orderedOptionIds)}
     >
       Submit my preferences
     </Button>

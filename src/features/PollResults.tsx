@@ -5,10 +5,10 @@ import { getRanking } from "./getRanking";
 import "./PollResults.css";
 import { Screen } from "../widgets/Screen";
 import { useHistory } from "react-router-dom";
-import { PollType } from "../api/PollType";
+import { PollState } from "../models/PollState";
 
 export type PollResultsProps = {
-  poll: PollType;
+  poll: PollState;
 };
 
 export const PollResults: FC<PollResultsProps> = ({ poll }) => {
