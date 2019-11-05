@@ -14,7 +14,12 @@ export const Screen: FC<ScreenProps> = ({
   children
 }) => {
   return (
-    <form className="Screen">
+    <form
+      className="Screen"
+      onSubmit={e => {
+        e.preventDefault();
+      }}
+    >
       <header className="Screen-header">
         <h1>Get Preference</h1>
       </header>

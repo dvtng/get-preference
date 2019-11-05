@@ -6,7 +6,7 @@ import { useCurrentUser } from "../models/CurrentUser";
 import { PollOptionsWaiting } from "../features/PollOptionsWaiting";
 import { PollOptionsScreen } from "./PollOptionsScreen";
 import { PollVoteWaiting } from "../features/PollVoteWaiting";
-import { PollResults } from "../features/PollResults";
+import { PollResultsScreen } from "./PollResultsScreen";
 
 export type PollScreenProps = {
   pollId: string;
@@ -42,6 +42,6 @@ export const PollScreen: FC<PollScreenProps> = ({ pollId }) => {
       <PollVoteScreen poll={poll} />
     )
   ) : (
-    <PollResults poll={poll} />
+    <PollResultsScreen poll={poll} />
   );
 };

@@ -28,6 +28,7 @@ export class Poll {
   id: string;
   private currentUser: CurrentUser;
   private ref: DocumentRef;
+  private data: PollState | undefined = undefined;
 
   constructor(db: Db, currentUser: CurrentUser, id: string) {
     this.id = id;
@@ -43,17 +44,19 @@ export class Poll {
     });
   }
 
-  addOption(creatorId: string, label: string) {
+  addOption(label: string): Promise<Option> {
     const id = uuid();
     const option: Option = {
       id,
-      creatorId,
+      creatorId: this.currentUser.id,
       createdAt: Date.now(),
       label
     };
-    return this.ref.update({
-      [`options.${id}`]: option
-    });
+    return this.ref
+      .update({
+        [`options.${id}`]: option
+      })
+      .then(() => option);
   }
 
   submitOptions() {
@@ -80,12 +83,22 @@ export class Poll {
     });
   }
 
+  get(): Promise<PollState> {
+    return this.ref.get() as Promise<PollState>;
+  }
+
   subscribe(onData: (data: PollState) => void): () => void {
     return this.ref.onSnapshot(doc => {
       const data = doc.data();
       if (data) {
-        data.id = this.id;
-        onData(data as PollState);
+        const poll = {
+          ...data,
+          id: this.id
+        } as PollState;
+        this.data = poll;
+        onData(poll);
+      } else {
+        this.data = data;
       }
     });
   }

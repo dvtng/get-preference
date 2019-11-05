@@ -5,12 +5,15 @@ import { App } from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { initFirebase, getFirebaseDb } from "./firebase";
 import { DbContext } from "./api/DbContext";
+import { BrowserRouter } from "react-router-dom";
 
 initFirebase();
 
 ReactDOM.render(
   <DbContext.Provider value={getFirebaseDb()}>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </DbContext.Provider>,
   document.getElementById("root")
 );

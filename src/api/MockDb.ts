@@ -57,6 +57,15 @@ class MockDocumentRef implements DocumentRef {
     this.emitSnapshot();
   }
 
+  get(): Promise<Data> {
+    return new Promise(resolve => {
+      const unsub = this.onSnapshot(snapshot => {
+        resolve(snapshot.data());
+        unsub();
+      });
+    });
+  }
+
   onSnapshot(onNext: DocumentSnapshotListener): () => void {
     const handler: DocumentSnapshotListener = (snapshot: DocumentSnapshot) => {
       onNext(snapshot);
@@ -64,7 +73,9 @@ class MockDocumentRef implements DocumentRef {
     this.handlers.push(handler);
 
     const snapshot = new MockDocumentSnapshot(this.data);
-    handler(snapshot);
+    setTimeout(() => {
+      handler(snapshot);
+    }, 0);
 
     return () => {
       this.handlers = this.handlers.filter(x => x !== handler);
