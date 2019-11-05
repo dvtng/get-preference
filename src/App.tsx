@@ -1,7 +1,12 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  match as Match
+} from "react-router-dom";
 import { HomeScreen } from "./screens/HomeScreen";
-import { NeedsName } from "./features/NeedsName";
+import { NameScreen } from "./screens/NameScreen";
 import { PollScreen } from "./screens/PollScreen";
 
 export function App() {
@@ -9,15 +14,15 @@ export function App() {
     <Router>
       <Switch>
         <Route path="/" exact>
-          <NeedsName>
+          <NameScreen>
             <HomeScreen />
-          </NeedsName>
+          </NameScreen>
         </Route>
         <Route path="/poll/:pollId" exact>
           {({ match }) => (
-            <NeedsName>
-              <PollScreen pollId={match.params.pollId} />
-            </NeedsName>
+            <NameScreen>
+              <PollScreen pollId={(match as Match<any>).params.pollId} />
+            </NameScreen>
           )}
         </Route>
       </Switch>

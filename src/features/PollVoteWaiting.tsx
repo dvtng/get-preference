@@ -1,10 +1,15 @@
-import React from "react";
+import React, { FC } from "react";
 import { Screen } from "../widgets/Screen";
 import { Button } from "../widgets/Button";
 import { PollWaiting } from "./PollWaiting";
 import { closePoll } from "../api/PollApi";
+import { PollType } from "../api/PollType";
 
-export const PollVoteWaiting = ({ poll }) => (
+export type PollVoteWaitingProps = {
+  poll: PollType;
+};
+
+export const PollVoteWaiting: FC<PollVoteWaitingProps> = ({ poll }) => (
   <Screen
     title={poll.name}
     subTitle="Waiting for everyone to finish voting..."
@@ -16,7 +21,7 @@ export const PollVoteWaiting = ({ poll }) => (
   >
     <PollWaiting
       poll={poll}
-      isReady={userId => poll.votes && poll.votes[userId]}
+      isReady={userId => Boolean(poll.votes && poll.votes[userId])}
     />
   </Screen>
 );

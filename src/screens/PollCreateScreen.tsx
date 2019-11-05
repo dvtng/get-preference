@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { CreatePollButton } from "./CreatePollButton";
+import { CreatePollButton } from "../features/CreatePollButton";
 import { Screen } from "../widgets/Screen";
 
-export const CreatePoll = () => {
+export const PollCreateScreen = () => {
   const [pollName, setPollName] = useState("");
 
   return (

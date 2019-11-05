@@ -1,8 +1,13 @@
 import React from "react";
-import { Tag } from "../widgets/Tag";
+import { Tag } from "./Tag";
 import "./PollOption.css";
 
-export const PollOption = ({ label, points }) => {
+export type PollOptionProps = {
+  label: string;
+  points?: number;
+};
+
+export const PollOption = ({ label, points }: PollOptionProps) => {
   return (
     <div className="PollOption">
       <div className="PollOption-inner">

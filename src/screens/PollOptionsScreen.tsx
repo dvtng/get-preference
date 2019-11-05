@@ -1,12 +1,17 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, FC } from "react";
 import { PollOption } from "../widgets/PollOption";
 import { createOption } from "../models/Option";
 import { Screen } from "../widgets/Screen";
 import { CurrentUserContext } from "../models/CurrentUser";
 import { addOption, submitOptions } from "../api/PollApi";
 import { Button } from "../widgets/Button";
+import { PollType } from "../api/PollType";
 
-export const PollOptions = ({ poll }) => {
+export type PollOptionsScreenProps = {
+  poll: PollType;
+};
+
+export const PollOptionsScreen: FC<PollOptionsScreenProps> = ({ poll }) => {
   const currentUser = useContext(CurrentUserContext);
   const [newOptionValue, setNewOptionValue] = useState("");
 

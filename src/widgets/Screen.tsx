@@ -1,7 +1,18 @@
-import React from "react";
+import React, { ReactNode, FC } from "react";
 import "./Screen.css";
 
-export const Screen = ({ title, subTitle, actions, children }) => {
+export type ScreenProps = {
+  title?: string;
+  subTitle?: string;
+  actions?: ReactNode | ReactNode[];
+};
+
+export const Screen: FC<ScreenProps> = ({
+  title,
+  subTitle,
+  actions,
+  children
+}) => {
   return (
     <form className="Screen">
       <header className="Screen-header">

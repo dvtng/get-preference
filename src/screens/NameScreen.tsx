@@ -1,11 +1,11 @@
-import React, { useState, useContext } from "react";
-import { CurrentUserContext } from "../models/CurrentUser";
+import React, { useState, FC } from "react";
+import { useCurrentUser } from "../models/CurrentUser";
 import { observer } from "mobx-react-lite";
 import { Screen } from "../widgets/Screen";
 import { Button } from "../widgets/Button";
 
-export const NeedsName = observer(({ children }) => {
-  const currentUser = useContext(CurrentUserContext);
+export const NameScreen: FC = observer(({ children }) => {
+  const currentUser = useCurrentUser();
 
   const [name, setName] = useState("");
 
@@ -16,7 +16,7 @@ export const NeedsName = observer(({ children }) => {
   };
 
   if (currentUser.name) {
-    return children;
+    return <>{children}</>;
   }
 
   return (

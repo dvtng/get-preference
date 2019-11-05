@@ -1,25 +1,16 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, FC } from "react";
 import { PollOption } from "../widgets/PollOption";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { SubmitVoteButton } from "./SubmitVoteButton";
-import { observer } from "mobx-react-lite";
+import { SubmitVoteButton } from "../features/SubmitVoteButton";
 import { Screen } from "../widgets/Screen";
+import { shuffle } from "../utilities/shuffle";
+import { PollType } from "../api/PollType";
 
-const swap = (array, a, b) => {
-  const temp = array[a];
-  array[a] = array[b];
-  array[b] = temp;
+export type PollVoteScreenProps = {
+  poll: PollType;
 };
 
-const shuffle = array => {
-  for (let i = array.length - 1; i >= 1; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    swap(array, i, j);
-  }
-  return array;
-};
-
-export const PollVote = observer(({ poll }) => {
+export const PollVoteScreen: FC<PollVoteScreenProps> = ({ poll }) => {
   const [orderedOptionIds, setOrderedOptionIds] = useState(() => {
     return shuffle(Object.values(poll.options).map(option => option.id));
   });
@@ -77,4 +68,4 @@ export const PollVote = observer(({ poll }) => {
       </DragDropContext>
     </Screen>
   );
-});
+};

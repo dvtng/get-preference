@@ -1,13 +1,18 @@
-import React from "react";
+import React, { FC } from "react";
 import { PollOption } from "../widgets/PollOption";
 import { Button } from "../widgets/Button";
 import { getRanking } from "./getRanking";
 import "./PollResults.css";
 import { Screen } from "../widgets/Screen";
 import { useHistory } from "react-router-dom";
+import { PollType } from "../api/PollType";
 
-export const PollResults = ({ poll }) => {
-  const ranking = getRanking(Object.values(poll.votes));
+export type PollResultsProps = {
+  poll: PollType;
+};
+
+export const PollResults: FC<PollResultsProps> = ({ poll }) => {
+  const ranking = getRanking(Object.values(poll.votes || {}));
   const history = useHistory();
 
   return (

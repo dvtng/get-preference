@@ -1,6 +1,20 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  FC,
+  ButtonHTMLAttributes,
+  SyntheticEvent
+} from "react";
 
-export const Button = props => {
+export type ButtonProps = Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  "onClick"
+> & {
+  onClick(e: SyntheticEvent<HTMLButtonElement>): Promise<unknown> | unknown;
+};
+
+export const Button: FC<ButtonProps> = props => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isMounted = useRef(true);
