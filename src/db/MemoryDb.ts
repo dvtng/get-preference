@@ -11,7 +11,7 @@ import {
 import { setInPath } from "../utilities/setInPath";
 import { SimpleDocumentSnapshot } from "./SimpleDocumentSnapshot";
 
-class MockDocumentRef implements DocumentRef {
+class MemoryDocumentRef implements DocumentRef {
   id: string;
   private data: Data | undefined;
   private handlers: DocumentSnapshotListener[] = [];
@@ -69,30 +69,30 @@ class MockDocumentRef implements DocumentRef {
   }
 }
 
-class MockCollectionRef implements CollectionRef {
-  private docs: { [id: string]: MockDocumentRef } = {};
+class MemoryCollectionRef implements CollectionRef {
+  private docs: { [id: string]: MemoryDocumentRef } = {};
 
-  async add(data: Data): Promise<MockDocumentRef> {
+  async add(data: Data): Promise<MemoryDocumentRef> {
     const id = uuid();
-    this.docs[id] = new MockDocumentRef(id);
+    this.docs[id] = new MemoryDocumentRef(id);
     this.docs[id].set(data);
     return this.docs[id];
   }
 
-  doc(id: string): MockDocumentRef {
+  doc(id: string): MemoryDocumentRef {
     if (!this.docs[id]) {
-      this.docs[id] = new MockDocumentRef(id);
+      this.docs[id] = new MemoryDocumentRef(id);
     }
     return this.docs[id];
   }
 }
 
-export class MockDb implements Db {
-  private collections: { [name: string]: MockCollectionRef } = {};
+export class MemoryDb implements Db {
+  private collections: { [name: string]: MemoryCollectionRef } = {};
 
-  collection(name: string): MockCollectionRef {
+  collection(name: string): MemoryCollectionRef {
     if (!this.collections[name]) {
-      this.collections[name] = new MockCollectionRef();
+      this.collections[name] = new MemoryCollectionRef();
     }
     return this.collections[name];
   }
