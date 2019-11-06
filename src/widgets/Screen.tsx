@@ -1,5 +1,6 @@
 import React, { ReactNode, FC } from "react";
 import "./Screen.css";
+import { Link } from "react-router-dom";
 
 export type ScreenProps = {
   title?: string;
@@ -21,7 +22,9 @@ export const Screen: FC<ScreenProps> = ({
       }}
     >
       <header className="Screen-header">
-        <h1>Get Preference</h1>
+        <Link to="/">
+          <h1>Get Preference</h1>
+        </Link>
       </header>
       <div className="Screen-main">
         {title && <h2>{title}</h2>}
