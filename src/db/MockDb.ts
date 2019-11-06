@@ -5,7 +5,8 @@ import {
   DocumentSnapshot,
   Data,
   DocumentSnapshotListener,
-  CollectionRef
+  CollectionRef,
+  Db
 } from "./Db";
 import { setInPath } from "../utilities/setInPath";
 import { SimpleDocumentSnapshot } from "./SimpleDocumentSnapshot";
@@ -15,9 +16,8 @@ class MockDocumentRef implements DocumentRef {
   private data: Data | undefined;
   private handlers: DocumentSnapshotListener[] = [];
 
-  constructor(id: string, data: Data | undefined) {
+  constructor(id: string) {
     this.id = id;
-    this.data = data;
   }
 
   async update(updates: Data): Promise<void> {
@@ -37,6 +37,12 @@ class MockDocumentRef implements DocumentRef {
 
   get(): Promise<SimpleDocumentSnapshot> {
     return Promise.resolve(new SimpleDocumentSnapshot(this.data));
+  }
+
+  set(data: Data): Promise<void> {
+    this.data = data;
+    this.emitSnapshot();
+    return Promise.resolve();
   }
 
   onSnapshot(onNext: DocumentSnapshotListener): () => void {
@@ -68,19 +74,20 @@ class MockCollectionRef implements CollectionRef {
 
   async add(data: Data): Promise<MockDocumentRef> {
     const id = uuid();
-    this.docs[id] = new MockDocumentRef(id, data);
+    this.docs[id] = new MockDocumentRef(id);
+    this.docs[id].set(data);
     return this.docs[id];
   }
 
   doc(id: string): MockDocumentRef {
     if (!this.docs[id]) {
-      this.docs[id] = new MockDocumentRef(id, undefined);
+      this.docs[id] = new MockDocumentRef(id);
     }
     return this.docs[id];
   }
 }
 
-export class MockDb {
+export class MockDb implements Db {
   private collections: { [name: string]: MockCollectionRef } = {};
 
   collection(name: string): MockCollectionRef {

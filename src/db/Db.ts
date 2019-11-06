@@ -12,6 +12,7 @@ export type DocumentRef = {
   id: string;
   update(updates: Data): Promise<void>;
   get(): Promise<DocumentSnapshot>;
+  set(data: Data): Promise<void>;
   onSnapshot(onNext: DocumentSnapshotListener): () => void;
 };
 

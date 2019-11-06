@@ -5,7 +5,8 @@ import {
   DocumentSnapshot,
   Data,
   DocumentSnapshotListener,
-  CollectionRef
+  CollectionRef,
+  Db
 } from "./Db";
 import { SimpleDocumentSnapshot } from "./SimpleDocumentSnapshot";
 import { setInPath } from "../utilities/setInPath";
@@ -39,6 +40,11 @@ class LocalstorageDocumentRef implements DocumentRef {
 
   get(): Promise<DocumentSnapshot> {
     return Promise.resolve(new SimpleDocumentSnapshot(this.read()));
+  }
+
+  set(data: Data): Promise<void> {
+    this.write(data);
+    return Promise.resolve();
   }
 
   onSnapshot(onNext: DocumentSnapshotListener): () => void {
@@ -89,6 +95,7 @@ class LocalstorageCollectionRef implements CollectionRef {
   async add(data: Data): Promise<LocalstorageDocumentRef> {
     const id = uuid();
     this.docs[id] = new LocalstorageDocumentRef(this.name, id);
+    this.docs[id].set(data);
     return this.docs[id];
   }
 
@@ -100,7 +107,7 @@ class LocalstorageCollectionRef implements CollectionRef {
   }
 }
 
-export class LocalstorageDb {
+export class LocalstorageDb implements Db {
   private collections: { [name: string]: LocalstorageCollectionRef } = {};
 
   collection(name: string): LocalstorageCollectionRef {
