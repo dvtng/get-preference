@@ -45,7 +45,7 @@ export const PollOptionsScreen: FC<PollOptionsScreenProps> = ({ poll }) => {
         }}
       />
       {poll.options && (
-        <div style={{ paddingTop: 8 }}>
+        <div style={{ paddingTop: 16 }}>
           {Object.values(poll.options)
             .sort((a, b) => b.createdAt - a.createdAt)
             .map(option => (

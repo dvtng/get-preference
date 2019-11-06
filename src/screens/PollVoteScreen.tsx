@@ -53,10 +53,17 @@ export const PollVoteScreen: FC<PollVoteScreenProps> = ({ poll }) => {
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                       className={["draggable"]
-                        .concat(snapshot.isDragging ? ["dragging"] : [])
+                        .concat(
+                          snapshot.isDragging && !snapshot.isDropAnimating
+                            ? ["dragging"]
+                            : []
+                        )
                         .join(" ")}
                     >
-                      <PollOption label={poll.options[optionId].label} />
+                      <PollOption
+                        label={poll.options[optionId].label}
+                        draggable
+                      />
                     </div>
                   )}
                 </Draggable>

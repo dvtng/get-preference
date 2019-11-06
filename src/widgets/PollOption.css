@@ -1,20 +1,42 @@
 .PollOption {
-  padding: 8px 0;
+  padding-bottom: 16px;
 }
 
 .PollOption-inner {
-  border: 1px solid #828282;
+  align-items: center;
+  border: 1px solid #806a6a;
   border-radius: 4px;
   display: flex;
-  justify-content: space-between;
   padding: 12px 22px;
 }
 
 .draggable .PollOption-inner {
   background: #c5c5c5;
+  border-color: #c5c5c5;
   color: black;
+  box-shadow: rgba(0, 0, 0, 0.8) 0 6px 6px;
+  transition: background 0.4s, border-color 0.4s;
 }
 
 .dragging .PollOption-inner {
   background: #fefefe;
+  border-color: #fefefe;
+}
+
+.PollOption-dragHandleContainer {
+  height: 0;
+  line-height: 0;
+  display: flex;
+  align-items: center;
+}
+
+.PollOption-points {
+  margin-left: 8px;
+}
+
+.DragHandle {
+  margin-left: -10px;
+  margin-right: 10px;
+  opacity: 0.4;
+  height: 26px;
 }
