@@ -7,30 +7,8 @@ import {
   DocumentSnapshotListener,
   CollectionRef
 } from "./Db";
-
-const setPath = (object: Data, path: string[], value: any): void => {
-  const key = path[0];
-  if (path.length === 1) {
-    object[key] = value;
-    return;
-  }
-  if (!object[key]) {
-    object[key] = {};
-  }
-  setPath(object[key], path.slice(1), value);
-};
-
-class MockDocumentSnapshot implements DocumentSnapshot {
-  private _data: Data | undefined;
-
-  constructor(data: Data | undefined) {
-    this._data = data;
-  }
-
-  data(): Data | undefined {
-    return this._data;
-  }
-}
+import { setInPath } from "../utilities/setInPath";
+import { SimpleDocumentSnapshot } from "./SimpleDocumentSnapshot";
 
 class MockDocumentRef implements DocumentRef {
   id: string;
@@ -51,19 +29,14 @@ class MockDocumentRef implements DocumentRef {
 
     this.data = produce(this.data, draft => {
       Object.entries(updates).forEach(([key, value]) => {
-        setPath(draft, key.split("."), value);
+        setInPath(draft, key.split("."), value);
       });
     });
     this.emitSnapshot();
   }
 
-  get(): Promise<Data> {
-    return new Promise(resolve => {
-      const unsub = this.onSnapshot(snapshot => {
-        resolve(snapshot.data());
-        unsub();
-      });
-    });
+  get(): Promise<SimpleDocumentSnapshot> {
+    return Promise.resolve(new SimpleDocumentSnapshot(this.data));
   }
 
   onSnapshot(onNext: DocumentSnapshotListener): () => void {
@@ -72,7 +45,7 @@ class MockDocumentRef implements DocumentRef {
     };
     this.handlers.push(handler);
 
-    const snapshot = new MockDocumentSnapshot(this.data);
+    const snapshot = new SimpleDocumentSnapshot(this.data);
     setTimeout(() => {
       handler(snapshot);
     }, 0);
@@ -83,7 +56,7 @@ class MockDocumentRef implements DocumentRef {
   }
 
   private emitSnapshot() {
-    const snapshot = new MockDocumentSnapshot(this.data);
+    const snapshot = new SimpleDocumentSnapshot(this.data);
     this.handlers.forEach(handler => {
       handler(snapshot);
     });

@@ -3,14 +3,18 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import { App } from "./App";
 import * as serviceWorker from "./serviceWorker";
-import { initFirebase, getFirebaseDb } from "./firebase";
-import { DbContext } from "./api/DbContext";
+import { initFirebase } from "./firebase";
+import { DbContext } from "./db/DbContext";
 import { BrowserRouter } from "react-router-dom";
+import { getFirestoreDb } from "./db/FirestoreDb";
+import { LocalstorageDb } from "./db/LocalstorageDb";
 
 initFirebase();
 
 ReactDOM.render(
-  <DbContext.Provider value={getFirebaseDb()}>
+  <DbContext.Provider
+    value={{ local: new LocalstorageDb(), remote: getFirestoreDb() }}
+  >
     <BrowserRouter>
       <App />
     </BrowserRouter>

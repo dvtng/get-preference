@@ -11,7 +11,7 @@ export type DocumentSnapshotListener = (snapshot: DocumentSnapshot) => void;
 export type DocumentRef = {
   id: string;
   update(updates: Data): Promise<void>;
-  get(): Promise<Data>;
+  get(): Promise<DocumentSnapshot>;
   onSnapshot(onNext: DocumentSnapshotListener): () => void;
 };
 

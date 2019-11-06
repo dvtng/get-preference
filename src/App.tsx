@@ -4,7 +4,7 @@ import { HomeScreen } from "./screens/HomeScreen";
 import { NameScreen } from "./screens/NameScreen";
 import { PollScreen } from "./screens/PollScreen";
 
-export function App() {
+export const App = () => {
   return (
     <Switch>
       <Route path="/" exact>
@@ -21,4 +21,4 @@ export function App() {
       </Route>
     </Switch>
   );
-}
+};

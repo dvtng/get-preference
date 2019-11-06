@@ -1,7 +1,7 @@
 import { useEffect, FC, ReactElement, useState } from "react";
-import { useDb } from "../api/DbContext";
+import { useDb } from "../db/DbContext";
 import { useCurrentUser, CurrentUser } from "../models/CurrentUser";
-import { Db } from "../api/Db";
+import { Db } from "../db/Db";
 
 export type SetupProps = {
   children: (
@@ -14,7 +14,7 @@ export type SetupProps = {
  * Perform setup operations before rendering a story.
  */
 export const Setup: FC<SetupProps> = ({ children: childrenFn }) => {
-  const db = useDb();
+  const db = useDb("remote");
   const currentUser = useCurrentUser();
   const [element, setElement] = useState<ReactElement | null>(null);
   useEffect(() => {

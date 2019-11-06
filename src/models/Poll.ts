@@ -2,8 +2,8 @@ import { useEffect, useState, useMemo } from "react";
 import uuid from "nanoid";
 import { PollState, Option } from "./PollState";
 import { CurrentUser, useCurrentUser } from "./CurrentUser";
-import { Db, DocumentRef } from "../api/Db";
-import { useDb } from "../api/DbContext";
+import { Db, DocumentRef } from "../db/Db";
+import { useDb } from "../db/DbContext";
 
 const COLLECTION_NAME = "polls";
 
@@ -84,7 +84,7 @@ export class Poll {
   }
 
   get(): Promise<PollState> {
-    return this.ref.get() as Promise<PollState>;
+    return this.ref.get().then(snapshot => snapshot.data() as PollState);
   }
 
   subscribe(onData: (data: PollState) => void): () => void {
@@ -118,7 +118,7 @@ export const usePollState = (pollId: string): PollState | null => {
 };
 
 export const usePollActions = (pollId: string): Poll => {
-  const db = useDb();
+  const db = useDb("remote");
   const currentUser = useCurrentUser();
   return useMemo(() => new Poll(db, currentUser, pollId), [
     db,

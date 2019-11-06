@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import { useCurrentUser } from "../models/CurrentUser";
 import { Button, ButtonProps } from "../widgets/Button";
 import { useHistory } from "react-router-dom";
-import { useDb } from "../api/DbContext";
+import { useDb } from "../db/DbContext";
 import { Poll } from "../models/Poll";
 
 export type CreatePollButtonProps = {
@@ -12,7 +12,7 @@ export type CreatePollButtonProps = {
 
 export const CreatePollButton: FC<CreatePollButtonProps> = observer(
   ({ pollName, disabled, ...otherProps }) => {
-    const db = useDb();
+    const db = useDb("remote");
     const currentUser = useCurrentUser();
     const history = useHistory();
 

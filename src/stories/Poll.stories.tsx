@@ -4,7 +4,7 @@ import { Setup } from "./Setup";
 import { Poll } from "../models/Poll";
 import { PollOptionsScreen } from "../screens/PollOptionsScreen";
 import { PollVoteScreen } from "../screens/PollVoteScreen";
-import { Db } from "../api/Db";
+import { Db } from "../db/Db";
 import { CurrentUser } from "../models/CurrentUser";
 import { PollResultsScreen } from "../screens/PollResultsScreen";
 

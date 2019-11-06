@@ -1,10 +1,8 @@
 import React from "react";
 import { configure, addDecorator } from "@storybook/react";
-import { MemoryRouter } from "react-router-dom";
 import "../src/index.css";
+import { Mock } from "../src/Mock";
 
-const DefaultDecorator = storyFn => <MemoryRouter>{storyFn()}</MemoryRouter>;
-
-addDecorator(DefaultDecorator);
+addDecorator(storyFn => <Mock>{storyFn()}</Mock>);
 
 configure(require.context("../src", true, /\.stories\.tsx$/), module);
