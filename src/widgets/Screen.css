@@ -21,6 +21,14 @@
   letter-spacing: 1px;
 }
 
+.Screen-main,
+.Screen-footer {
+  box-sizing: border-box;
+  margin: 0 auto;
+  max-width: 500px;
+  width: 100%;
+}
+
 .Screen-main {
   flex: 1;
   height: 100%;
