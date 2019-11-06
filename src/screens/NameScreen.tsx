@@ -1,12 +1,12 @@
 import React, { useState, FC } from "react";
-import { useCurrentUser } from "../models/CurrentUser";
-import { observer } from "mobx-react-lite";
+import { useCurrentUser, useCurrentUserState } from "../models/CurrentUser";
 import { Screen } from "../widgets/Screen";
 import { Button } from "../widgets/Button";
+import { LoadingScreen } from "./LoadingScreen";
 
-export const NameScreen: FC = observer(({ children }) => {
+export const NameScreen: FC = ({ children }) => {
   const currentUser = useCurrentUser();
-
+  const currentUserState = useCurrentUserState();
   const [name, setName] = useState("");
 
   const submitName = () => {
@@ -15,7 +15,9 @@ export const NameScreen: FC = observer(({ children }) => {
     }
   };
 
-  if (currentUser.name) {
+  if (!currentUserState) return <LoadingScreen />;
+
+  if (currentUserState.name) {
     return <>{children}</>;
   }
 
@@ -37,4 +39,4 @@ export const NameScreen: FC = observer(({ children }) => {
       />
     </Screen>
   );
-});
+};

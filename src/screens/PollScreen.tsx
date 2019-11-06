@@ -1,8 +1,8 @@
 import React, { useEffect, FC } from "react";
-import { usePollState, usePollActions } from "../models/Poll";
+import { usePollState, usePoll } from "../models/Poll";
 import { PollVoteScreen } from "./PollVoteScreen";
 import { LoadingScreen } from "./LoadingScreen";
-import { useCurrentUser } from "../models/CurrentUser";
+import { useCurrentUserState } from "../models/CurrentUser";
 import { PollOptionsWaiting } from "../features/PollOptionsWaiting";
 import { PollOptionsScreen } from "./PollOptionsScreen";
 import { PollVoteWaiting } from "../features/PollVoteWaiting";
@@ -13,35 +13,36 @@ export type PollScreenProps = {
 };
 
 export const PollScreen: FC<PollScreenProps> = ({ pollId }) => {
-  const poll = usePollState(pollId);
-  const pollActions = usePollActions(pollId);
-  const currentUser = useCurrentUser();
+  const pollState = usePollState(pollId);
+  const pollActions = usePoll(pollId);
+  const currentUserState = useCurrentUserState();
 
   useEffect(() => {
     pollActions.join();
   }, [pollActions]);
 
-  if (!poll) {
+  if (!pollState || !currentUserState) {
     return <LoadingScreen />;
   }
 
   const hasSubmittedOptions =
-    poll.submittedOptions && poll.submittedOptions[currentUser.id];
-  const hasVoted = poll.votes && poll.votes[currentUser.id];
+    pollState.submittedOptions &&
+    pollState.submittedOptions[currentUserState.id];
+  const hasVoted = pollState.votes && pollState.votes[currentUserState.id];
 
-  return poll.status === "OPTIONS" ? (
+  return pollState.status === "OPTIONS" ? (
     hasSubmittedOptions ? (
-      <PollOptionsWaiting poll={poll} />
+      <PollOptionsWaiting poll={pollState} />
     ) : (
-      <PollOptionsScreen poll={poll} />
+      <PollOptionsScreen poll={pollState} />
     )
-  ) : poll.status === "OPEN" ? (
+  ) : pollState.status === "OPEN" ? (
     hasVoted ? (
-      <PollVoteWaiting poll={poll} />
+      <PollVoteWaiting poll={pollState} />
     ) : (
-      <PollVoteScreen poll={poll} />
+      <PollVoteScreen poll={pollState} />
     )
   ) : (
-    <PollResultsScreen poll={poll} />
+    <PollResultsScreen poll={pollState} />
   );
 };

@@ -1,28 +1,32 @@
-import { useEffect, useState, useMemo } from "react";
+import { useMemo } from "react";
 import uuid from "nanoid";
 import { PollState, Option } from "./PollState";
 import { CurrentUser, useCurrentUser } from "./CurrentUser";
 import { Db, DocumentRef } from "../db/Db";
 import { useDb } from "../db/DbContext";
+import { useObservable, Observable } from "../utilities/useObservable";
 
 const COLLECTION_NAME = "polls";
 
-export class Poll {
-  static create(db: Db, currentUser: CurrentUser, name: string): Promise<Poll> {
-    return db
-      .collection(COLLECTION_NAME)
-      .add({
-        creatorId: currentUser.id,
-        status: "OPTIONS",
-        name,
-        users: {
-          [currentUser.id]: {
-            name: currentUser.name
-          }
-        },
-        options: {}
-      })
-      .then(docRef => new Poll(db, currentUser, docRef.id));
+export class Poll implements Observable<PollState> {
+  static async create(
+    db: Db,
+    currentUser: CurrentUser,
+    name: string
+  ): Promise<Poll> {
+    const currentUserState = await currentUser.get();
+    const { id } = await db.collection(COLLECTION_NAME).add({
+      creatorId: currentUserState.id,
+      status: "OPTIONS",
+      name,
+      users: {
+        [currentUserState.id]: {
+          name: currentUserState.name
+        }
+      },
+      options: {}
+    });
+    return new Poll(db, currentUser, id);
   }
 
   id: string;
@@ -35,19 +39,21 @@ export class Poll {
     this.ref = db.collection(COLLECTION_NAME).doc(id);
   }
 
-  join() {
+  async join() {
+    const currentUserState = await this.currentUser.get();
     return this.ref.update({
-      [`users.${this.currentUser.id}`]: {
-        name: this.currentUser.name
+      [`users.${currentUserState.id}`]: {
+        name: currentUserState.name
       }
     });
   }
 
-  addOption(label: string): Promise<Option> {
+  async addOption(label: string): Promise<Option> {
+    const currentUserState = await this.currentUser.get();
     const id = uuid();
     const option: Option = {
       id,
-      creatorId: this.currentUser.id,
+      creatorId: currentUserState.id,
       createdAt: Date.now(),
       label
     };
@@ -58,25 +64,27 @@ export class Poll {
       .then(() => option);
   }
 
-  submitOptions() {
+  async submitOptions(): Promise<void> {
+    const currentUserState = await this.currentUser.get();
     return this.ref.update({
-      [`submittedOptions.${this.currentUser.id}`]: true
+      [`submittedOptions.${currentUserState.id}`]: true
     });
   }
 
-  startVoting() {
+  startVoting(): Promise<void> {
     return this.ref.update({
       status: "OPEN"
     });
   }
 
-  submitVote(orderedOptionIds: string[]) {
+  async submitVote(orderedOptionIds: string[]): Promise<void> {
+    const currentUserState = await this.currentUser.get();
     return this.ref.update({
-      [`votes.${this.currentUser.id}`]: orderedOptionIds
+      [`votes.${currentUserState.id}`]: orderedOptionIds
     });
   }
 
-  closePoll() {
+  closePoll(): Promise<void> {
     return this.ref.update({
       status: "CLOSED"
     });
@@ -100,20 +108,7 @@ export class Poll {
   }
 }
 
-export const usePollState = (pollId: string): PollState | null => {
-  const poll = usePollActions(pollId);
-  const [pollData, setPollData] = useState<PollState | null>(null);
-
-  useEffect(() => {
-    return poll.subscribe(data => {
-      setPollData(data);
-    });
-  }, [poll]);
-
-  return pollData;
-};
-
-export const usePollActions = (pollId: string): Poll => {
+export const usePoll = (pollId: string): Poll => {
   const db = useDb("remote");
   const currentUser = useCurrentUser();
   return useMemo(() => new Poll(db, currentUser, pollId), [
@@ -121,4 +116,9 @@ export const usePollActions = (pollId: string): Poll => {
     currentUser,
     pollId
   ]);
+};
+
+export const usePollState = (pollId: string): PollState | undefined => {
+  const poll = usePoll(pollId);
+  return useObservable(poll);
 };

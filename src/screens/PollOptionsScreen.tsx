@@ -2,7 +2,7 @@ import React, { useState, FC } from "react";
 import { PollOption } from "../widgets/PollOption";
 import { Screen } from "../widgets/Screen";
 import { Button } from "../widgets/Button";
-import { usePollActions } from "../models/Poll";
+import { usePoll } from "../models/Poll";
 import { PollState } from "../models/PollState";
 
 export type PollOptionsScreenProps = {
@@ -10,7 +10,7 @@ export type PollOptionsScreenProps = {
 };
 
 export const PollOptionsScreen: FC<PollOptionsScreenProps> = ({ poll }) => {
-  const pollActions = usePollActions(poll.id);
+  const pollActions = usePoll(poll.id);
   const [newOptionValue, setNewOptionValue] = useState("");
 
   const submitOption = () => {
