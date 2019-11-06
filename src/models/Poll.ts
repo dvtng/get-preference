@@ -28,7 +28,6 @@ export class Poll {
   id: string;
   private currentUser: CurrentUser;
   private ref: DocumentRef;
-  private data: PollState | undefined = undefined;
 
   constructor(db: Db, currentUser: CurrentUser, id: string) {
     this.id = id;
@@ -95,10 +94,7 @@ export class Poll {
           ...data,
           id: this.id
         } as PollState;
-        this.data = poll;
         onData(poll);
-      } else {
-        this.data = data;
       }
     });
   }
