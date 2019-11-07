@@ -24,7 +24,7 @@ export const PollOptionsScreen: FC<PollOptionsScreenProps> = ({ poll }) => {
       subTitle="Add options to vote on:"
       actions={
         <Button type="submit" onClick={() => pollActions.submitOptions()}>
-          I'm out of ideas
+          I'm ready to vote
         </Button>
       }
     >

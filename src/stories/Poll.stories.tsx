@@ -7,6 +7,7 @@ import { PollVoteScreen } from "../screens/PollVoteScreen";
 import { Db } from "../db/Db";
 import { CurrentUser } from "../models/CurrentUser";
 import { PollResultsScreen } from "../screens/PollResultsScreen";
+import { PollOptionsWaitingScreen } from "../screens/PollOptionsWaitingScreen";
 
 const createPoll = async (db: Db, currentUser: CurrentUser) => {
   const poll = await Poll.create(
@@ -37,6 +38,19 @@ export const pollOptionsScreen = () => (
       const poll = await createPoll(db, currentUser);
       const pollState = await poll.get();
       return <PollOptionsScreen poll={pollState} />;
+    }}
+  </Setup>
+);
+
+export const pollOptionsWaitingScreen = () => (
+  <Setup>
+    {async (db, currentUser) => {
+      const poll = await createPoll(db, currentUser);
+      await currentUser.setName("Polly");
+      await poll.join();
+      await poll.submitOptions();
+      const pollState = await poll.get();
+      return <PollOptionsWaitingScreen poll={pollState} />;
     }}
   </Setup>
 );

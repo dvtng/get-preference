@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { Screen } from "../widgets/Screen";
 import { Button } from "../widgets/Button";
-import { PollWaiting } from "./PollWaiting";
+import { PollWaiting } from "../features/PollWaiting";
 import { PollState } from "../models/PollState";
 import { usePoll } from "../models/Poll";
 
@@ -9,7 +9,9 @@ export type PollOptionsWaitingProps = {
   poll: PollState;
 };
 
-export const PollOptionsWaiting: FC<PollOptionsWaitingProps> = ({ poll }) => {
+export const PollOptionsWaitingScreen: FC<PollOptionsWaitingProps> = ({
+  poll
+}) => {
   const pollActions = usePoll(poll.id);
 
   return (

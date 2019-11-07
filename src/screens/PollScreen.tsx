@@ -3,7 +3,7 @@ import { usePollState, usePoll } from "../models/Poll";
 import { PollVoteScreen } from "./PollVoteScreen";
 import { LoadingScreen } from "./LoadingScreen";
 import { useCurrentUserState } from "../models/CurrentUser";
-import { PollOptionsWaiting } from "../features/PollOptionsWaiting";
+import { PollOptionsWaitingScreen } from "./PollOptionsWaitingScreen";
 import { PollOptionsScreen } from "./PollOptionsScreen";
 import { PollVoteWaiting } from "../features/PollVoteWaiting";
 import { PollResultsScreen } from "./PollResultsScreen";
@@ -32,7 +32,7 @@ export const PollScreen: FC<PollScreenProps> = ({ pollId }) => {
 
   return pollState.status === "OPTIONS" ? (
     hasSubmittedOptions ? (
-      <PollOptionsWaiting poll={pollState} />
+      <PollOptionsWaitingScreen poll={pollState} />
     ) : (
       <PollOptionsScreen poll={pollState} />
     )
