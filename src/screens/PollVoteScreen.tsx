@@ -5,6 +5,12 @@ import { SubmitVoteButton } from "../features/SubmitVoteButton";
 import { Screen } from "../widgets/Screen";
 import { shuffle } from "../utilities/shuffle";
 import { PollState } from "../models/PollState";
+import { useCurrentUserState } from "../models/CurrentUser";
+import { LoadingScreen } from "./LoadingScreen";
+import { Popup } from "../widgets/Popup";
+import { Button } from "../widgets/Button";
+import { usePoll } from "../models/Poll";
+import { PollWaiting } from "../features/PollWaiting";
 
 export type PollVoteScreenProps = {
   poll: PollState;
@@ -14,6 +20,9 @@ export const PollVoteScreen: FC<PollVoteScreenProps> = ({ poll }) => {
   const [orderedOptionIds, setOrderedOptionIds] = useState(() => {
     return shuffle(Object.values(poll.options).map(option => option.id));
   });
+
+  const currentUserState = useCurrentUserState();
+  const pollActions = usePoll(poll.id);
 
   const onDragEnd = useCallback(
     props => {
@@ -29,6 +38,12 @@ export const PollVoteScreen: FC<PollVoteScreenProps> = ({ poll }) => {
     },
     [orderedOptionIds]
   );
+
+  if (!currentUserState) {
+    return <LoadingScreen />;
+  }
+
+  const hasVoted = poll.votes && Boolean(poll.votes[currentUserState.id]);
 
   return (
     <Screen
@@ -73,6 +88,23 @@ export const PollVoteScreen: FC<PollVoteScreenProps> = ({ poll }) => {
           )}
         </Droppable>
       </DragDropContext>
+      <Popup
+        isOpen={hasVoted}
+        actions={
+          <>
+            <Button onClick={() => pollActions.submitVote(null)}>Back</Button>
+            <Button type="submit" onClick={() => pollActions.closePoll()}>
+              Close poll
+            </Button>
+          </>
+        }
+      >
+        <h3>Waiting for everyone to finish voting...</h3>
+        <PollWaiting
+          poll={poll}
+          isReady={userId => Boolean(poll.votes && poll.votes[userId])}
+        />
+      </Popup>
     </Screen>
   );
 };

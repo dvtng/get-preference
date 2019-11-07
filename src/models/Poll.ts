@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import uuid from "nanoid";
 import { PollState, Option } from "./PollState";
 import { CurrentUser, useCurrentUser } from "./CurrentUser";
-import { Db, DocumentRef } from "../db/Db";
+import { Db, DocumentRef, Data } from "../db/Db";
 import { useDb } from "../db/DbContext";
 import { useObservable, Observable } from "../utilities/useObservable";
 
@@ -64,10 +64,10 @@ export class Poll implements Observable<PollState> {
       .then(() => option);
   }
 
-  async submitOptions(): Promise<void> {
+  async submitOptions(submitted: boolean = true): Promise<void> {
     const currentUserState = await this.currentUser.get();
     return this.ref.update({
-      [`submittedOptions.${currentUserState.id}`]: true
+      [`submittedOptions.${currentUserState.id}`]: submitted
     });
   }
 
@@ -77,7 +77,7 @@ export class Poll implements Observable<PollState> {
     });
   }
 
-  async submitVote(orderedOptionIds: string[]): Promise<void> {
+  async submitVote(orderedOptionIds: string[] | null): Promise<void> {
     const currentUserState = await this.currentUser.get();
     return this.ref.update({
       [`votes.${currentUserState.id}`]: orderedOptionIds
@@ -91,20 +91,26 @@ export class Poll implements Observable<PollState> {
   }
 
   get(): Promise<PollState> {
-    return this.ref.get().then(snapshot => snapshot.data() as PollState);
+    return this.ref.get().then(snapshot => {
+      const data = snapshot.data() as Data;
+      return this.toPollState(data);
+    });
   }
 
   subscribe(onData: (data: PollState) => void): () => void {
     return this.ref.onSnapshot(doc => {
       const data = doc.data();
       if (data) {
-        const poll = {
-          ...data,
-          id: this.id
-        } as PollState;
-        onData(poll);
+        onData(this.toPollState(data));
       }
     });
+  }
+
+  private toPollState(data: Data): PollState {
+    return {
+      ...data,
+      id: this.id
+    } as PollState;
   }
 }
 

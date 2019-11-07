@@ -15,12 +15,16 @@ export const PollWaiting: FC<PollWaitingProps> = ({ poll, isReady }) => {
           userA.name.localeCompare(userB.name)
         )
         .map(([id, user]) => (
-          <p key={id}>
-            {user.name}:{" "}
+          <p key={id} className="PollWaiting-row">
+            <span className="PollWaiting-name">{user.name}:</span>
             {isReady(id) ? (
-              <span className="PollWaiting-ready">Ready!</span>
+              <span className="PollWaiting-status PollWaiting-ready">
+                Ready!
+              </span>
             ) : (
-              <span className="PollWaiting-voting">Waiting...</span>
+              <span className="PollWaiting-status PollWaiting-voting">
+                Waiting...
+              </span>
             )}
           </p>
         ))}

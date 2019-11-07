@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export type ScreenProps = {
   title?: string;
   subTitle?: string;
-  actions?: ReactNode | ReactNode[];
+  actions?: ReactNode;
 };
 
 export const Screen: FC<ScreenProps> = ({

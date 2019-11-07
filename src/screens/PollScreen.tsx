@@ -3,9 +3,7 @@ import { usePollState, usePoll } from "../models/Poll";
 import { PollVoteScreen } from "./PollVoteScreen";
 import { LoadingScreen } from "./LoadingScreen";
 import { useCurrentUserState } from "../models/CurrentUser";
-import { PollOptionsWaitingScreen } from "./PollOptionsWaitingScreen";
 import { PollOptionsScreen } from "./PollOptionsScreen";
-import { PollVoteWaiting } from "../features/PollVoteWaiting";
 import { PollResultsScreen } from "./PollResultsScreen";
 
 export type PollScreenProps = {
@@ -25,23 +23,10 @@ export const PollScreen: FC<PollScreenProps> = ({ pollId }) => {
     return <LoadingScreen />;
   }
 
-  const hasSubmittedOptions =
-    pollState.submittedOptions &&
-    pollState.submittedOptions[currentUserState.id];
-  const hasVoted = pollState.votes && pollState.votes[currentUserState.id];
-
   return pollState.status === "OPTIONS" ? (
-    hasSubmittedOptions ? (
-      <PollOptionsWaitingScreen poll={pollState} />
-    ) : (
-      <PollOptionsScreen poll={pollState} />
-    )
+    <PollOptionsScreen poll={pollState} />
   ) : pollState.status === "OPEN" ? (
-    hasVoted ? (
-      <PollVoteWaiting poll={pollState} />
-    ) : (
-      <PollVoteScreen poll={pollState} />
-    )
+    <PollVoteScreen poll={pollState} />
   ) : (
     <PollResultsScreen poll={pollState} />
   );

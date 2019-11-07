@@ -2,27 +2,35 @@ import React from "react";
 import { PollCreateScreen } from "../screens/PollCreateScreen";
 import { Setup } from "./Setup";
 import { Poll } from "../models/Poll";
-import { PollOptionsScreen } from "../screens/PollOptionsScreen";
-import { PollVoteScreen } from "../screens/PollVoteScreen";
 import { Db } from "../db/Db";
 import { CurrentUser } from "../models/CurrentUser";
-import { PollResultsScreen } from "../screens/PollResultsScreen";
-import { PollOptionsWaitingScreen } from "../screens/PollOptionsWaitingScreen";
+import { PollScreen } from "../screens/PollScreen";
+import { MemoryDb } from "../db/MemoryDb";
 
-const createPoll = async (db: Db, currentUser: CurrentUser) => {
+const createExamplePoll = async (db: Db, currentUser: CurrentUser) => {
+  await currentUser.setName("Polly");
   const poll = await Poll.create(
     db,
     currentUser,
     "What is your favorite color?"
   );
+  await poll.join();
+  return poll;
+};
 
+const addExampleOptions = async (poll: Poll) => {
   const green = await poll.addOption("Green");
   const red = await poll.addOption("Red");
   const blue = await poll.addOption("Blue");
   const indigo = await poll.addOption("Indigo");
+  return [green, red, blue, indigo];
+};
 
-  await poll.submitVote([red.id, green.id, blue.id, indigo.id]);
-
+const joinPollAsUser = async (db: Db, pollId: string, name: string) => {
+  const currentUser = new CurrentUser(new MemoryDb());
+  await currentUser.setName(name);
+  const poll = new Poll(db, currentUser, pollId);
+  await poll.join();
   return poll;
 };
 
@@ -30,47 +38,66 @@ export default {
   title: "Poll"
 };
 
-export const pollCreateScreen = () => <PollCreateScreen />;
+export const createPoll = () => <PollCreateScreen />;
 
-export const pollOptionsScreen = () => (
+export const addOptions = () => (
   <Setup>
     {async (db, currentUser) => {
-      const poll = await createPoll(db, currentUser);
-      const pollState = await poll.get();
-      return <PollOptionsScreen poll={pollState} />;
+      const poll = await createExamplePoll(db, currentUser);
+      return <PollScreen pollId={poll.id} />;
     }}
   </Setup>
 );
 
-export const pollOptionsWaitingScreen = () => (
+export const addOptionsWaiting = () => (
   <Setup>
     {async (db, currentUser) => {
-      const poll = await createPoll(db, currentUser);
-      await currentUser.setName("Polly");
-      await poll.join();
+      const poll = await createExamplePoll(db, currentUser);
+      await addExampleOptions(poll);
       await poll.submitOptions();
-      const pollState = await poll.get();
-      return <PollOptionsWaitingScreen poll={pollState} />;
+      await joinPollAsUser(db, poll.id, "Molly");
+      await joinPollAsUser(db, poll.id, "Olly");
+      return <PollScreen pollId={poll.id} />;
     }}
   </Setup>
 );
 
-export const pollVoteScreen = () => (
+export const vote = () => (
   <Setup>
     {async (db, currentUser) => {
-      const poll = await createPoll(db, currentUser);
-      const pollState = await poll.get();
-      return <PollVoteScreen poll={pollState} />;
+      const poll = await createExamplePoll(db, currentUser);
+      await addExampleOptions(poll);
+      await poll.startVoting();
+      return <PollScreen pollId={poll.id} />;
     }}
   </Setup>
 );
 
-export const pollResultsScreen = () => (
+export const voteWaiting = () => (
   <Setup>
     {async (db, currentUser) => {
-      const poll = await createPoll(db, currentUser);
-      const pollState = await poll.get();
-      return <PollResultsScreen poll={pollState} />;
+      const poll = await createExamplePoll(db, currentUser);
+      const options = await addExampleOptions(poll);
+      await poll.startVoting();
+      await poll.submitVote(options.map(o => o.id));
+      const mollyPoll = await joinPollAsUser(db, poll.id, "Molly");
+      await mollyPoll.submitVote(options.map(o => o.id));
+      await joinPollAsUser(db, poll.id, "Olly");
+      return <PollScreen pollId={poll.id} />;
+    }}
+  </Setup>
+);
+
+export const results = () => (
+  <Setup>
+    {async (db, currentUser) => {
+      const poll = await createExamplePoll(db, currentUser);
+      const options = await addExampleOptions(poll);
+      await poll.submitVote(options.map(o => o.id));
+      const mollyPoll = await joinPollAsUser(db, poll.id, "Molly");
+      await mollyPoll.submitVote(options.map(o => o.id));
+      await poll.closePoll();
+      return <PollScreen pollId={poll.id} />;
     }}
   </Setup>
 );

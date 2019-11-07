@@ -1,0 +1,44 @@
+.Popup {
+  position: fixed;
+  background: rgba(0, 0, 0, 0);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  transition: 0.2s background;
+}
+
+.Popup.open {
+  background: rgba(0, 0, 0, 0.7);
+  bottom: 0;
+  pointer-events: auto;
+}
+
+.Popup-contents {
+  background: #282c34;
+  box-sizing: border-box;
+  position: absolute;
+  bottom: -100%;
+  width: 100%;
+  opacity: 0;
+  transition: 0.2s all;
+}
+
+.Popup.open>.Popup-contents {
+  bottom: 0;
+  opacity: 1;
+}
+
+.Popup-main {
+  padding: 18px;
+}
+
+.Popup-footer {
+  display: flex;
+  justify-content: stretch;
+}
+
+.Popup-footer button {
+  flex: 1;
+}

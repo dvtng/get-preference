@@ -1,3 +1,19 @@
+.PollWaiting-row {
+  display: flex;
+}
+
+.PollWaiting-name {
+  padding-right: 8px;
+  text-align: right;
+  width: 50%;
+}
+
+.PollWaiting-status {
+  padding-left: 8px;
+  text-align: left;
+  width: 50%;
+}
+
 .PollWaiting-ready {
   color: #0bb751;
 }

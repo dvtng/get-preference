@@ -4,6 +4,10 @@ import { Screen } from "../widgets/Screen";
 import { Button } from "../widgets/Button";
 import { usePoll } from "../models/Poll";
 import { PollState } from "../models/PollState";
+import { useCurrentUserState } from "../models/CurrentUser";
+import { LoadingScreen } from "./LoadingScreen";
+import { Popup } from "../widgets/Popup";
+import { PollWaiting } from "../features/PollWaiting";
 
 export type PollOptionsScreenProps = {
   poll: PollState;
@@ -12,10 +16,20 @@ export type PollOptionsScreenProps = {
 export const PollOptionsScreen: FC<PollOptionsScreenProps> = ({ poll }) => {
   const pollActions = usePoll(poll.id);
   const [newOptionValue, setNewOptionValue] = useState("");
+  const currentUserState = useCurrentUserState();
+
+  if (!currentUserState) {
+    return <LoadingScreen />;
+  }
+
+  const hasSubmitted =
+    poll.submittedOptions && poll.submittedOptions[currentUserState.id];
 
   const submitOption = () => {
-    pollActions.addOption(newOptionValue);
-    setNewOptionValue("");
+    if (newOptionValue) {
+      pollActions.addOption(newOptionValue);
+      setNewOptionValue("");
+    }
   };
 
   return (
@@ -38,9 +52,7 @@ export const PollOptionsScreen: FC<PollOptionsScreenProps> = ({ poll }) => {
         onKeyDown={e => {
           if (e.key === "Enter") {
             e.preventDefault();
-            if (newOptionValue) {
-              submitOption();
-            }
+            submitOption();
           }
         }}
       />
@@ -53,6 +65,29 @@ export const PollOptionsScreen: FC<PollOptionsScreenProps> = ({ poll }) => {
             ))}
         </div>
       )}
+      <Popup
+        isOpen={hasSubmitted}
+        actions={
+          <>
+            <Button onClick={() => pollActions.submitOptions(false)}>
+              Back
+            </Button>
+            <Button type="submit" onClick={() => pollActions.startVoting()}>
+              Lock options
+            </Button>
+          </>
+        }
+      >
+        <h3>Waiting for everyone to submit options...</h3>
+        <PollWaiting
+          poll={poll}
+          isReady={userId =>
+            Boolean(
+              poll.submittedOptions && poll.submittedOptions[userId] === true
+            )
+          }
+        />
+      </Popup>
     </Screen>
   );
 };
