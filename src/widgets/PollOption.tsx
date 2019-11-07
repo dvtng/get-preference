@@ -1,5 +1,4 @@
 import React from "react";
-import { Tag } from "./Tag";
 import "./PollOption.css";
 
 const DragHandle = () => (
