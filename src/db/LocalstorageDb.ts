@@ -10,6 +10,7 @@ import {
 } from "./Db";
 import { SimpleDocumentSnapshot } from "./SimpleDocumentSnapshot";
 import { setInPath } from "../utilities/setInPath";
+import undefined from "firebase/empty-import";
 
 class LocalstorageDocumentRef implements DocumentRef {
   id: string;
@@ -47,6 +48,11 @@ class LocalstorageDocumentRef implements DocumentRef {
     return Promise.resolve();
   }
 
+  async delete(): Promise<void> {
+    localStorage.removeItem(this.getKey());
+    this.emitSnapshot(undefined);
+  }
+
   onSnapshot(onNext: DocumentSnapshotListener): () => void {
     const handler: DocumentSnapshotListener = (snapshot: DocumentSnapshot) => {
       onNext(snapshot);
@@ -76,7 +82,7 @@ class LocalstorageDocumentRef implements DocumentRef {
     this.emitSnapshot(data);
   }
 
-  private emitSnapshot(data: Data) {
+  private emitSnapshot(data: Data | undefined) {
     const snapshot = new SimpleDocumentSnapshot(data);
     this.handlers.forEach(handler => {
       handler(snapshot);

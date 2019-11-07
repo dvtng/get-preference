@@ -35,14 +35,17 @@ class MemoryDocumentRef implements DocumentRef {
     this.emitSnapshot();
   }
 
-  get(): Promise<SimpleDocumentSnapshot> {
-    return Promise.resolve(new SimpleDocumentSnapshot(this.data));
+  async get(): Promise<SimpleDocumentSnapshot> {
+    return new SimpleDocumentSnapshot(this.data);
   }
 
-  set(data: Data): Promise<void> {
+  async set(data: Data): Promise<void> {
     this.data = data;
     this.emitSnapshot();
-    return Promise.resolve();
+  }
+
+  async delete(): Promise<void> {
+    this.data = undefined;
   }
 
   onSnapshot(onNext: DocumentSnapshotListener): () => void {
