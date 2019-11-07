@@ -10,7 +10,6 @@ import {
 } from "./Db";
 import { SimpleDocumentSnapshot } from "./SimpleDocumentSnapshot";
 import { setInPath } from "../utilities/setInPath";
-import undefined from "firebase/empty-import";
 
 class LocalstorageDocumentRef implements DocumentRef {
   id: string;
