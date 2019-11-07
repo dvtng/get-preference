@@ -28,11 +28,12 @@ export const PollResultsScreen: FC<PollResultsProps> = ({ poll }) => {
         </Button>
       }
     >
-      {ranking.map(([optionId, points], index) => (
+      {ranking.map(([optionId, points]) => (
         <PollOption
           key={optionId}
           label={poll.options[optionId].label}
           points={points}
+          maxPoints={ranking[0][1]}
         />
       ))}
     </Screen>

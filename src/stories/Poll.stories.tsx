@@ -44,6 +44,7 @@ export const addOptions = () => (
   <Setup>
     {async (db, currentUser) => {
       const poll = await createExamplePoll(db, currentUser);
+      await addExampleOptions(poll);
       return <PollScreen pollId={poll.id} />;
     }}
   </Setup>

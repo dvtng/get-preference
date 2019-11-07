@@ -17,23 +17,35 @@ export type PollOptionProps = {
   label: string;
   draggable?: boolean;
   points?: number;
+  maxPoints?: number;
 };
 
-export const PollOption = ({ label, draggable, points }: PollOptionProps) => {
+export const PollOption = ({
+  label,
+  draggable,
+  points,
+  maxPoints
+}: PollOptionProps) => {
+  const backgroundStyle =
+    points != null && maxPoints
+      ? {
+          background: "#4d7cba",
+          width: `${(points / maxPoints) * 100}%`,
+          opacity: (points / maxPoints) * 0.8 + 0.2
+        }
+      : undefined;
+
   return (
     <div className="PollOption">
+      <div className="PollOption-background" style={backgroundStyle}></div>
       <div className="PollOption-inner">
-        {draggable && (
-          <div className="PollOption-dragHandleContainer">
-            <DragHandle />
-          </div>
-        )}
-        {label}
+        <div className="PollOption-label">
+          {draggable && <DragHandle />}
+          {label}
+        </div>
         {points ? (
           <div className="PollOption-points">
-            <Tag>
-              {points} point{points > 1 ? "s" : ""}
-            </Tag>
+            {points} point{points > 1 ? "s" : ""}
           </div>
         ) : null}
       </div>
