@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import "./PollOption.css";
 
 const DragHandle = () => (
@@ -17,13 +17,15 @@ export type PollOptionProps = {
   draggable?: boolean;
   points?: number;
   maxPoints?: number;
+  right?: ReactNode;
 };
 
 export const PollOption = ({
   label,
   draggable,
   points,
-  maxPoints
+  maxPoints,
+  right
 }: PollOptionProps) => {
   const backgroundStyle =
     points != null && maxPoints
@@ -42,11 +44,7 @@ export const PollOption = ({
           {draggable && <DragHandle />}
           {label}
         </div>
-        {points ? (
-          <div className="PollOption-points">
-            {points} point{points > 1 ? "s" : ""}
-          </div>
-        ) : null}
+        {right}
       </div>
     </div>
   );

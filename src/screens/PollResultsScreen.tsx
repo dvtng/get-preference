@@ -34,6 +34,11 @@ export const PollResultsScreen: FC<PollResultsProps> = ({ poll }) => {
           label={poll.options[optionId].label}
           points={points}
           maxPoints={ranking[0][1]}
+          right={
+            <small>
+              {points} point{points > 1 ? "s" : ""}
+            </small>
+          }
         />
       ))}
     </Screen>

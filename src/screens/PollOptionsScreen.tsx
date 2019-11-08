@@ -8,6 +8,7 @@ import { useCurrentUserState } from "../models/CurrentUser";
 import { LoadingScreen } from "./LoadingScreen";
 import { Popup } from "../widgets/Popup";
 import { PollWaiting } from "../features/PollWaiting";
+import { MdClose } from "react-icons/md";
 
 export type PollOptionsScreenProps = {
   poll: PollState;
@@ -61,7 +62,24 @@ export const PollOptionsScreen: FC<PollOptionsScreenProps> = ({ poll }) => {
           {Object.values(poll.options)
             .sort((a, b) => b.createdAt - a.createdAt)
             .map(option => (
-              <PollOption key={option.id} label={option.label} />
+              <PollOption
+                key={option.id}
+                label={option.label}
+                right={
+                  <div
+                    style={{
+                      marginRight: -22,
+                      borderTopRightRadius: 4,
+                      borderBottomRightRadius: 4,
+                      overflow: "hidden"
+                    }}
+                  >
+                    <Button onClick={() => pollActions.removeOption(option.id)}>
+                      <MdClose />
+                    </Button>
+                  </div>
+                }
+              />
             ))}
         </div>
       )}

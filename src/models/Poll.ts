@@ -64,6 +64,12 @@ export class Poll implements Observable<PollState> {
       .then(() => option);
   }
 
+  async removeOption(id: string) {
+    return this.ref.update({
+      [`options.${id}`]: null
+    });
+  }
+
   async submitOptions(submitted: boolean = true): Promise<void> {
     const currentUserState = await this.currentUser.get();
     return this.ref.update({
@@ -109,7 +115,10 @@ export class Poll implements Observable<PollState> {
   private toPollState(data: Data): PollState {
     return {
       ...data,
-      id: this.id
+      id: this.id,
+      options: Object.fromEntries(
+        Object.entries(data.options).filter(([id, option]) => option)
+      )
     } as PollState;
   }
 }

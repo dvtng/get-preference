@@ -24,7 +24,6 @@ input {
   line-height: inherit;
   font-size: inherit;
   transition: 0.2s all;
-  width: 100%;
 }
 
 input {
@@ -33,6 +32,7 @@ input {
   color: black;
   outline: none;
   padding: 12px 22px;
+  width: 100%;
 }
 
 input:focus {
@@ -42,7 +42,10 @@ input:focus {
 button {
   background: #495161;
   color: white;
-  padding: 16px 22px;
+  display: flex;
+  height: 100%;
+  padding: 16px;
+  justify-content: center;
 }
 
 button[type="submit"] {
