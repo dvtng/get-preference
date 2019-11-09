@@ -1,6 +1,6 @@
 import React, { useState, FC } from "react";
 import { PollOption } from "../widgets/PollOption";
-import { Screen } from "../widgets/Screen";
+import { Screen } from "../features/Screen";
 import { Button } from "../widgets/Button";
 import { usePoll } from "../models/Poll";
 import { PollState } from "../models/PollState";

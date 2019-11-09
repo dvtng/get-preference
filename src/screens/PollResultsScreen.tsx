@@ -1,8 +1,8 @@
 import React, { FC } from "react";
 import { PollOption } from "../widgets/PollOption";
 import { Button } from "../widgets/Button";
-import { getRanking } from "../features/getRanking";
-import { Screen } from "../widgets/Screen";
+import { getRanking } from "../utilities/getRanking";
+import { Screen } from "../features/Screen";
 import { useHistory } from "react-router-dom";
 import { PollState } from "../models/PollState";
 

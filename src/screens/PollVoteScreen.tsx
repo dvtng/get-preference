@@ -2,7 +2,7 @@ import React, { useState, useCallback, FC } from "react";
 import { PollOption } from "../widgets/PollOption";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { SubmitVoteButton } from "../features/SubmitVoteButton";
-import { Screen } from "../widgets/Screen";
+import { Screen } from "../features/Screen";
 import { shuffle } from "../utilities/shuffle";
 import { PollState } from "../models/PollState";
 import { useCurrentUserState } from "../models/CurrentUser";

@@ -7,18 +7,28 @@
 
 .Screen-header {
   background: #151820;
+  color: #9a9a9a;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 .Screen-header h1 {
-  color: #9a9a9a;
   font-size: 16px;
   font-weight: normal;
-  margin: 16px;
-  letter-spacing: 1px;
+  margin: 16px 18px;
+}
+
+.Screen-header-left,
+.Screen-header-right {
+  width: 100px;
+  font-size: 0.8em;
+}
+
+.Screen-header-right {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .Screen-main,

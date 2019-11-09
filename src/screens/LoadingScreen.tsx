@@ -1,4 +1,4 @@
 import React from "react";
-import { Screen } from "../widgets/Screen";
+import { Screen } from "../features/Screen";
 
 export const LoadingScreen = () => <Screen subTitle="Loading..."></Screen>;

@@ -38,7 +38,14 @@ export default {
   title: "Poll"
 };
 
-export const createPoll = () => <PollCreateScreen />;
+export const createPoll = () => (
+  <Setup>
+    {async (db, currentUser) => {
+      currentUser.setName("Polly");
+      return <PollCreateScreen />;
+    }}
+  </Setup>
+);
 
 export const addOptions = () => (
   <Setup>

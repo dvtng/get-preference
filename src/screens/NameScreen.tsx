@@ -1,6 +1,6 @@
 import React, { useState, FC } from "react";
 import { useCurrentUser, useCurrentUserState } from "../models/CurrentUser";
-import { Screen } from "../widgets/Screen";
+import { Screen } from "../features/Screen";
 import { Button } from "../widgets/Button";
 import { LoadingScreen } from "./LoadingScreen";
 
