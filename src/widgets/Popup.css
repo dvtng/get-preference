@@ -32,11 +32,15 @@
 
 .Popup-main {
   padding: 18px;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .Popup-footer {
   display: flex;
   justify-content: stretch;
+  max-width: calc(500px - 36px);
+  margin: 0 auto;
 }
 
 .Popup-footer button {

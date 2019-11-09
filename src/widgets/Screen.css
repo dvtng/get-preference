@@ -25,7 +25,6 @@
 .Screen-footer {
   box-sizing: border-box;
   margin: 0 auto;
-  max-width: 500px;
   width: 100%;
 }
 
@@ -34,6 +33,7 @@
   height: 100%;
   padding: 18px;
   overflow: scroll;
+  max-width: 500px;
 }
 
 .Screen-main h2 {
@@ -52,6 +52,7 @@
 .Screen-footer {
   display: flex;
   justify-content: stretch;
+  max-width: calc(500px - 36px);
 }
 
 .Screen-footer button {
