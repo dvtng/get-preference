@@ -15,24 +15,22 @@ const DragHandle = () => (
 export type PollOptionProps = {
   label: string;
   draggable?: boolean;
-  points?: number;
-  maxPoints?: number;
   right?: ReactNode;
+  progress?: number;
 };
 
 export const PollOption = ({
   label,
   draggable,
-  points,
-  maxPoints,
-  right
+  right,
+  progress
 }: PollOptionProps) => {
   const backgroundStyle =
-    points != null && maxPoints
+    progress != null
       ? {
           background: "#4d7cba",
-          width: `${(points / maxPoints) * 100}%`,
-          opacity: (points / maxPoints) * 0.8 + 0.2
+          width: `${progress * 100}%`,
+          opacity: progress * 0.8 + 0.2
         }
       : undefined;
 

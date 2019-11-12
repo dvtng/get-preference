@@ -1,4 +1,4 @@
-import { getRanking } from "./getRanking";
+import { getPositionalRanking } from "./getPositionalRanking";
 
 it("should return immediate majority", () => {
   const votes = [
@@ -7,7 +7,12 @@ it("should return immediate majority", () => {
     ["a", "b", "d", "c"]
   ];
 
-  expect(getRanking(votes)).toEqual([["a", 12], ["b", 7], ["d", 6], ["c", 5]]);
+  expect(getPositionalRanking(votes)).toEqual([
+    ["a", 12],
+    ["b", 7],
+    ["d", 6],
+    ["c", 5]
+  ]);
 });
 
 it("should return majority winner in second preference", () => {
@@ -19,7 +24,7 @@ it("should return majority winner in second preference", () => {
     ["b", "d", "a", "c"]
   ];
 
-  expect(getRanking(votes)).toEqual([
+  expect(getPositionalRanking(votes)).toEqual([
     ["b", 16],
     ["a", 14],
     ["c", 10],

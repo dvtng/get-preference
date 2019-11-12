@@ -1,4 +1,4 @@
-export const getRanking = (votes: string[][]) => {
+export const getPositionalRanking = (votes: string[][]): [string, number][] => {
   const counts: { [id: string]: number } = {};
   votes.forEach(orderedPrefs => {
     orderedPrefs.forEach((option, index) => {

@@ -6,6 +6,7 @@ import { Db } from "../db/Db";
 import { CurrentUser } from "../models/CurrentUser";
 import { PollScreen } from "../screens/PollScreen";
 import { MemoryDb } from "../db/MemoryDb";
+import { shuffle } from "../utilities/shuffle";
 
 const createExamplePoll = async (db: Db, currentUser: CurrentUser) => {
   await currentUser.setName("Polly");
@@ -102,8 +103,12 @@ export const results = () => (
       const poll = await createExamplePoll(db, currentUser);
       const options = await addExampleOptions(poll);
       await poll.submitVote(options.map(o => o.id));
-      const mollyPoll = await joinPollAsUser(db, poll.id, "Molly");
-      await mollyPoll.submitVote(options.map(o => o.id));
+
+      for (let i = 0; i < 10; i++) {
+        const anotherPoll = await joinPollAsUser(db, poll.id, `User ${i + 1}`);
+        await anotherPoll.submitVote(shuffle(options.map(o => o.id)));
+      }
+
       await poll.closePoll();
       return <PollScreen pollId={poll.id} />;
     }}
