@@ -9,6 +9,7 @@ import { LoadingScreen } from "./LoadingScreen";
 import { Popup } from "../widgets/Popup";
 import { PollWaiting } from "../features/PollWaiting";
 import { MdClose } from "react-icons/md";
+import { useConfirmationPopup } from "../widgets/useConfirmationPopup";
 
 export type PollOptionsScreenProps = {
   poll: PollState;
@@ -18,6 +19,7 @@ export const PollOptionsScreen: FC<PollOptionsScreenProps> = ({ poll }) => {
   const pollActions = usePoll(poll.id);
   const [newOptionValue, setNewOptionValue] = useState("");
   const currentUserState = useCurrentUserState();
+  const confirmationPopup = useConfirmationPopup();
 
   if (!currentUserState) {
     return <LoadingScreen />;
@@ -74,7 +76,15 @@ export const PollOptionsScreen: FC<PollOptionsScreenProps> = ({ poll }) => {
                       overflow: "hidden"
                     }}
                   >
-                    <Button onClick={() => pollActions.removeOption(option.id)}>
+                    <Button
+                      onClick={() =>
+                        confirmationPopup.show({
+                          message:
+                            "Are you sure you want to delete this option?",
+                          onConfirm: () => pollActions.removeOption(option.id)
+                        })
+                      }
+                    >
                       <MdClose />
                     </Button>
                   </div>
@@ -83,6 +93,7 @@ export const PollOptionsScreen: FC<PollOptionsScreenProps> = ({ poll }) => {
             ))}
         </div>
       )}
+      {confirmationPopup.popup}
       <Popup
         isOpen={hasSubmitted}
         actions={

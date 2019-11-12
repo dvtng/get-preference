@@ -1,7 +1,7 @@
 import nanoid from "nanoid";
 import { useMemo } from "react";
 import { Db, DocumentRef } from "../db/Db";
-import { Observable, useObservable } from "../utilities/useObservable";
+import { Observable, useObservable } from "../widgets/useObservable";
 import { useDb } from "../db/DbContext";
 
 const OLD_CURRENT_USER_ID_KEY = "app.currentUserId";

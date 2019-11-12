@@ -4,7 +4,7 @@ import { PollState, Option } from "./PollState";
 import { CurrentUser, useCurrentUser } from "./CurrentUser";
 import { Db, DocumentRef, Data } from "../db/Db";
 import { useDb } from "../db/DbContext";
-import { useObservable, Observable } from "../utilities/useObservable";
+import { useObservable, Observable } from "../widgets/useObservable";
 
 const COLLECTION_NAME = "polls";
 
