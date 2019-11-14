@@ -18,14 +18,17 @@
 .Popup-contents {
   background: #282c34;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
   position: absolute;
   bottom: -100%;
   width: 100%;
   opacity: 0;
   transition: 0.2s all;
+  max-height: 100%;
 }
 
-.Popup.open>.Popup-contents {
+.Popup.open > .Popup-contents {
   bottom: 0;
   opacity: 1;
 }
@@ -33,13 +36,16 @@
 .Popup-main {
   padding: 18px;
   max-width: 500px;
+  width: 100%;
   margin: 0 auto;
+  overflow: scroll;
 }
 
 .Popup-footer {
   display: flex;
   justify-content: stretch;
   max-width: calc(500px - 36px);
+  width: 100%;
   margin: 0 auto;
 }
 
