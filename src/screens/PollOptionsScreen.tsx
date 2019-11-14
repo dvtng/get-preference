@@ -93,7 +93,6 @@ export const PollOptionsScreen: FC<PollOptionsScreenProps> = ({ poll }) => {
             ))}
         </div>
       )}
-      {confirmationPopup.popup}
       <Popup
         isOpen={hasSubmitted}
         actions={
@@ -101,13 +100,21 @@ export const PollOptionsScreen: FC<PollOptionsScreenProps> = ({ poll }) => {
             <Button onClick={() => pollActions.submitOptions(false)}>
               Back
             </Button>
-            <Button type="submit" onClick={() => pollActions.startVoting()}>
-              Lock options
+            <Button
+              type="submit"
+              onClick={() =>
+                confirmationPopup.show({
+                  message: "Lock these options and start voting for everyone?",
+                  onConfirm: () => pollActions.startVoting()
+                })
+              }
+            >
+              Start voting
             </Button>
           </>
         }
       >
-        <h3>Waiting for everyone to submit options...</h3>
+        <h3>Waiting for everyone else to submit options...</h3>
         <PollWaiting
           poll={poll}
           isReady={userId =>
@@ -117,6 +124,7 @@ export const PollOptionsScreen: FC<PollOptionsScreenProps> = ({ poll }) => {
           }
         />
       </Popup>
+      {confirmationPopup.popup}
     </Screen>
   );
 };

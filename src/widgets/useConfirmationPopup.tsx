@@ -52,7 +52,7 @@ export const useConfirmationPopup = (): ConfirmationPopup => {
           </>
         }
       >
-        <h3>{confirmationShowProps && confirmationShowProps.message}</h3>
+        {confirmationShowProps && <h3>{confirmationShowProps.message}</h3>}
       </Popup>
     )
   };

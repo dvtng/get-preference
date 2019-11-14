@@ -11,6 +11,7 @@ import { Popup } from "../widgets/Popup";
 import { Button } from "../widgets/Button";
 import { usePoll } from "../models/Poll";
 import { PollWaiting } from "../features/PollWaiting";
+import { useConfirmationPopup } from "../widgets/useConfirmationPopup";
 
 export type PollVoteScreenProps = {
   poll: PollState;
@@ -23,6 +24,7 @@ export const PollVoteScreen: FC<PollVoteScreenProps> = ({ poll }) => {
 
   const currentUserState = useCurrentUserState();
   const pollActions = usePoll(poll.id);
+  const confirmationPopup = useConfirmationPopup();
 
   const onDragEnd = useCallback(
     props => {
@@ -93,18 +95,27 @@ export const PollVoteScreen: FC<PollVoteScreenProps> = ({ poll }) => {
         actions={
           <>
             <Button onClick={() => pollActions.submitVote(null)}>Back</Button>
-            <Button type="submit" onClick={() => pollActions.closePoll()}>
+            <Button
+              type="submit"
+              onClick={() =>
+                confirmationPopup.show({
+                  message: "Close this poll and reveal the results?",
+                  onConfirm: () => pollActions.closePoll()
+                })
+              }
+            >
               Close poll
             </Button>
           </>
         }
       >
-        <h3>Waiting for everyone to finish voting...</h3>
+        <h3>Waiting for everyone else to finish voting...</h3>
         <PollWaiting
           poll={poll}
           isReady={userId => Boolean(poll.votes && poll.votes[userId])}
         />
       </Popup>
+      {confirmationPopup.popup}
     </Screen>
   );
 };
