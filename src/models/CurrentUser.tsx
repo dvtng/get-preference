@@ -1,67 +1,49 @@
-import nanoid from "nanoid";
 import { useMemo } from "react";
 import { Db, DocumentRef } from "../db/Db";
 import { Observable, useObservable } from "../widgets/useObservable";
 import { useDb } from "../db/DbContext";
 
-const OLD_CURRENT_USER_ID_KEY = "app.currentUserId";
-const OLD_CURRENT_USER_NAME_KEY = "app.currentUserName";
-
-type CurrentUserState = {
+export type CurrentUserState = {
   id: string;
-  name?: string;
+  name: string;
+};
+
+export const AnonymousUser: CurrentUserState = {
+  id: "ANONYMOUS",
+  name: "Anonymous"
 };
 
 export class CurrentUser implements Observable<CurrentUserState> {
   private ref: DocumentRef;
-  private hasInit = false;
 
   constructor(db: Db) {
     this.ref = db.collection("app").doc("currentUser");
   }
 
-  private async init(): Promise<DocumentRef> {
-    if (this.hasInit) return this.ref;
-
-    const currentUserState = await this.ref
-      .get()
-      .then(snapshot => snapshot.data() as CurrentUserState);
-
-    if (!currentUserState) {
-      const oldId = localStorage.getItem(OLD_CURRENT_USER_ID_KEY);
-      if (oldId) {
-        // Perform upgrade from previous storage format
-        await this.ref.set({
-          id: oldId,
-          name: localStorage.getItem(OLD_CURRENT_USER_NAME_KEY)
-        });
-        localStorage.removeItem(OLD_CURRENT_USER_ID_KEY);
-        localStorage.removeItem(OLD_CURRENT_USER_NAME_KEY);
-      } else {
-        // Initialize with a default ID
-        await this.ref.set({
-          id: nanoid()
-        });
-      }
-    }
-
-    this.hasInit = true;
-
-    return this.ref;
+  signIn(currentUserState: CurrentUserState) {
+    this.ref.set(currentUserState);
   }
 
-  setName(name: string): Promise<void> {
-    return this.init().then(ref => ref.update({ name }));
+  signOut() {
+    this.ref.set(AnonymousUser);
   }
 
   get(): Promise<CurrentUserState> {
-    return this.init()
-      .then(ref => ref.get())
-      .then(snapshot => snapshot.data() as CurrentUserState);
+    return this.ref
+      .get()
+      .then(snapshot => (snapshot.data() || AnonymousUser) as CurrentUserState);
+  }
+
+  getSignedIn(): Promise<CurrentUserState> {
+    return this.get().then(currentUserState => {
+      if (currentUserState.id === AnonymousUser.id) {
+        throw new Error("Expected signed in user");
+      }
+      return currentUserState;
+    });
   }
 
   subscribe(onData: (data: CurrentUserState) => void): () => void {
-    this.init();
     return this.ref.onSnapshot(snapshot => {
       const data = snapshot.data() as CurrentUserState | undefined;
       if (data) {
@@ -72,7 +54,7 @@ export class CurrentUser implements Observable<CurrentUserState> {
 }
 
 export const useCurrentUser = (): CurrentUser => {
-  const db = useDb("local");
+  const db = useDb("memory");
   return useMemo(() => new CurrentUser(db), [db]);
 };
 

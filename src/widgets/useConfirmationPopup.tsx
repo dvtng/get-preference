@@ -1,4 +1,4 @@
-import React, { ReactNode, FC, useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { Popup } from "./Popup";
 import { Button } from "./Button";
 

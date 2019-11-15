@@ -1,4 +1,5 @@
 import React from "react";
+import uuid from "nanoid";
 import { PollCreateScreen } from "../screens/PollCreateScreen";
 import { Setup } from "./Setup";
 import { Poll } from "../models/Poll";
@@ -9,7 +10,7 @@ import { MemoryDb } from "../db/MemoryDb";
 import { shuffle } from "../utilities/shuffle";
 
 const createExamplePoll = async (db: Db, currentUser: CurrentUser) => {
-  await currentUser.setName("Polly");
+  await currentUser.signIn({ id: "0", name: "Polly" });
   const poll = await Poll.create(
     db,
     currentUser,
@@ -29,7 +30,7 @@ const addExampleOptions = async (poll: Poll) => {
 
 const joinPollAsUser = async (db: Db, pollId: string, name: string) => {
   const currentUser = new CurrentUser(new MemoryDb());
-  await currentUser.setName(name);
+  await currentUser.signIn({ id: uuid(), name });
   const poll = new Poll(db, currentUser, pollId);
   await poll.join();
   return poll;
@@ -42,7 +43,7 @@ export default {
 export const createPoll = () => (
   <Setup>
     {async (db, currentUser) => {
-      currentUser.setName("Polly");
+      await currentUser.signIn({ id: "0", name: "Polly" });
       return <PollCreateScreen />;
     }}
   </Setup>

@@ -4,7 +4,9 @@ import { MemoryRouter } from "react-router-dom";
 import { DbContext } from "./db/DbContext";
 
 export const Mock: FC = ({ children }) => (
-  <DbContext.Provider value={{ local: new MemoryDb(), remote: new MemoryDb() }}>
+  <DbContext.Provider
+    value={{ memory: new MemoryDb(), remote: new MemoryDb() }}
+  >
     <MemoryRouter>{children}</MemoryRouter>
   </DbContext.Provider>
 );

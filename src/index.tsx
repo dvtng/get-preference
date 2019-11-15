@@ -7,14 +7,15 @@ import { initFirebase } from "./firebase";
 import { DbContext } from "./db/DbContext";
 import { BrowserRouter } from "react-router-dom";
 import { getFirestoreDb } from "./db/FirestoreDb";
-import { LocalstorageDb } from "./db/LocalstorageDb";
+import { MemoryDb } from "./db/MemoryDb";
+import { CurrentUser } from "./models/CurrentUser";
 
-initFirebase();
+const memoryDb = new MemoryDb();
+
+initFirebase(new CurrentUser(memoryDb));
 
 ReactDOM.render(
-  <DbContext.Provider
-    value={{ local: new LocalstorageDb(), remote: getFirestoreDb() }}
-  >
+  <DbContext.Provider value={{ memory: memoryDb, remote: getFirestoreDb() }}>
     <BrowserRouter>
       <App />
     </BrowserRouter>

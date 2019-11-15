@@ -14,7 +14,7 @@ export class Poll implements Observable<PollState> {
     currentUser: CurrentUser,
     name: string
   ): Promise<Poll> {
-    const currentUserState = await currentUser.get();
+    const currentUserState = await currentUser.getSignedIn();
     const { id } = await db.collection(COLLECTION_NAME).add({
       creatorId: currentUserState.id,
       status: "OPTIONS",
@@ -40,7 +40,7 @@ export class Poll implements Observable<PollState> {
   }
 
   async join() {
-    const currentUserState = await this.currentUser.get();
+    const currentUserState = await this.currentUser.getSignedIn();
     return this.ref.update({
       [`users.${currentUserState.id}`]: {
         name: currentUserState.name
@@ -49,7 +49,7 @@ export class Poll implements Observable<PollState> {
   }
 
   async addOption(label: string): Promise<Option> {
-    const currentUserState = await this.currentUser.get();
+    const currentUserState = await this.currentUser.getSignedIn();
     const id = uuid();
     const option: Option = {
       id,
@@ -71,7 +71,7 @@ export class Poll implements Observable<PollState> {
   }
 
   async submitOptions(submitted: boolean = true): Promise<void> {
-    const currentUserState = await this.currentUser.get();
+    const currentUserState = await this.currentUser.getSignedIn();
     return this.ref.update({
       [`submittedOptions.${currentUserState.id}`]: submitted
     });
@@ -84,7 +84,7 @@ export class Poll implements Observable<PollState> {
   }
 
   async submitVote(orderedOptionIds: string[] | null): Promise<void> {
-    const currentUserState = await this.currentUser.get();
+    const currentUserState = await this.currentUser.getSignedIn();
     return this.ref.update({
       [`votes.${currentUserState.id}`]: orderedOptionIds
     });
